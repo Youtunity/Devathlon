@@ -1,19 +1,16 @@
 package net.youtunity.devathlon.kit;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import net.youtunity.devathlon.service.ServiceRegistry;
 import net.youtunity.devathlon.spell.Spell;
 import net.youtunity.devathlon.spell.SpellMeta;
-import net.youtunity.devathlon.spell.SpellMetaCache;
+import net.youtunity.devathlon.spell.SpellService;
 import net.youtunity.devathlon.user.User;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 
 /**
  * Created by thecrealm on 16.07.16.
@@ -21,7 +18,7 @@ import java.util.Set;
 public class Kit {
 
     private String name;
-    private Map<Integer, Class<?>> availableSpells = Maps.newHashMap();
+    private Map<Integer, Spell> availableSpells = Maps.newHashMap();
 
     public Kit(String name) {
         this.name = name;
@@ -31,31 +28,18 @@ public class Kit {
         return name;
     }
 
-    public void addSpell(Class<?> spell, int slot) {
+    void addSpell(int slot, Spell spell) {
         availableSpells.put(slot, spell);
     }
 
-
-    public Spell createSpell(int index) {
-
-        Class<?> raw = availableSpells.get(index);
-        try {
-            return ((Spell) raw.newInstance());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    public Optional<Spell> getSpell(int index) {
+        return Optional.ofNullable(availableSpells.get(index));
     }
 
     public void giveItems(User user) {
-
-        System.out.println("PRE GIVE");
-
         availableSpells.forEach((integer, spell) -> {
-            System.out.println("GIVE");
             PlayerInventory inventory = user.getPlayer().getInventory();
-            SpellMeta meta = SpellMetaCache.get(spell);
+            SpellMeta meta = ServiceRegistry.lookupService(SpellService.class).lookupMeta(spell).get();
             inventory.setItem(integer, new ItemStack(meta.material()));
         });
     }

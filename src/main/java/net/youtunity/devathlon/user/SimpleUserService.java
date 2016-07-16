@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,13 @@ public class SimpleUserService implements UserService, Initializable, Listener {
 
     @Override
     public void init() {
+        Bukkit.getOnlinePlayers().forEach(o -> users.add(new User(o)));
         Bukkit.getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return Collections.unmodifiableList(this.users);
     }
 
     @Override

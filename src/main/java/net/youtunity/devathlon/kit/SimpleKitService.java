@@ -2,7 +2,11 @@ package net.youtunity.devathlon.kit;
 
 import com.google.common.collect.Lists;
 import net.youtunity.devathlon.DevathlonPlugin;
+import net.youtunity.devathlon.config.DevathlonConfig;
 import net.youtunity.devathlon.service.Initializable;
+import net.youtunity.devathlon.service.ServiceRegistry;
+import net.youtunity.devathlon.spell.Spell;
+import net.youtunity.devathlon.spell.SpellService;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +25,22 @@ public class SimpleKitService implements KitService, Initializable {
 
     @Override
     public void init() {
-        //Load kits from cfg
+
+        SpellService spellService = ServiceRegistry.lookupService(SpellService.class);
+
+        for (DevathlonConfig.KitConfig config : plugin.getDevathlonConfig().getKits()) {
+            Kit kit = new Kit(config.getKitName());
+
+            for (int i = 0; i < config.getSpells().length; i++) {
+                Optional<Spell> spell = spellService.find(config.getSpells()[i]);
+                if(spell.isPresent()) {
+                    kit.addSpell(i, spell.get());
+                }
+            }
+
+            kits.add(kit);
+            plugin.getLogger().info("Registered Kit: " + kit.getName());
+        }
     }
 
     @Override

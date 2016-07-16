@@ -41,4 +41,14 @@ public class User {
     public void cooldown(String spell, int cooldown) {
         cooldowns.put(spell, cooldown);
     }
+
+    public void updateCooldown() {
+        for (Map.Entry<String, Integer> entry : cooldowns.entrySet()) {
+            if(entry.getValue() == 0) {
+                cooldowns.remove(entry.getKey());
+            }
+
+            entry.setValue(entry.getValue() -1);
+        }
+    }
 }

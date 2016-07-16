@@ -18,6 +18,8 @@ public class ConfringoSpell implements Spell {
     @Override
     public void execute(SpellContext context) {
 
+        context.getInvoker().getPlayer().sendMessage("Im  the confringo");
+
         Location startLocation = context.getInvoker().getPlayer().getLocation().add(0, 0.5, 0);
 
 
