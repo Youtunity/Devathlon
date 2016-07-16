@@ -27,12 +27,7 @@ public class Party {
         return displayName;
     }
 
-    public Set<User> getUsers() {
-        return Collections.unmodifiableSet(users);
-    }
-
     //Kits
-
 
     public List<Kit> getAvailableKits() {
         return availableKits;
@@ -42,9 +37,13 @@ public class Party {
         this.availableKits.add(kit);
     }
 
+    //User
 
     public void join(User user) {
         this.users.add(user);
     }
 
+    public Set<User> getUsers() {
+        return Collections.unmodifiableSet(users);
+    }
 }

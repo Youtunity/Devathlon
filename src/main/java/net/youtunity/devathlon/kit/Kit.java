@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.youtunity.devathlon.spell.Spell;
 import net.youtunity.devathlon.spell.SpellMeta;
+import net.youtunity.devathlon.spell.SpellMetaCache;
 import net.youtunity.devathlon.user.User;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -45,10 +46,8 @@ public class Kit {
         availableSpells.forEach((integer, spell) -> {
             System.out.println("GIVE");
             PlayerInventory inventory = user.getPlayer().getInventory();
-            int offset = 36;
-            SpellMeta meta = spell.getAnnotation(SpellMeta.class);
-            inventory.setItem(offset + integer, new ItemStack(meta.material()));
-
+            SpellMeta meta = SpellMetaCache.get(spell);
+            inventory.setItem(integer, new ItemStack(meta.material()));
         });
     }
 }

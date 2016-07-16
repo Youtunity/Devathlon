@@ -1,5 +1,7 @@
 package net.youtunity.devathlon.user;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Maps;
 import net.youtunity.devathlon.kit.Kit;
 import org.bukkit.entity.Player;
@@ -15,6 +17,8 @@ public class User {
     private Kit kit;
 
     private Map<String, Integer> cooldowns = Maps.newHashMap();
+
+
 
     public User(Player player) {
         this.player = player;

@@ -2,6 +2,8 @@ package net.youtunity.devathlon;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import net.cubespace.Yamler.Config.InvalidConfigurationException;
+import net.youtunity.devathlon.config.DevathlonConfig;
 import net.youtunity.devathlon.kit.Kit;
 import net.youtunity.devathlon.party.Party;
 import net.youtunity.devathlon.spell.spells.TestSpell;
@@ -14,12 +16,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.*;
 
 /**
  * Created by thecrealm on 16.07.16.
  */
 public class DevathlonPlugin extends JavaPlugin {
+
+    private DevathlonConfig config;
 
     private Set<User> users = Sets.newHashSet();
     private Set<Party> parties = Sets.newHashSet();
@@ -31,6 +36,15 @@ public class DevathlonPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("Enabled!");
+
+        this.config = new DevathlonConfig();
+
+        try {
+            this.config.init(new File(getDataFolder() + File.separator + "config.yml"));
+            this.config.save(new File(getDataFolder() + File.separator + "config.yml"));
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
 
         Bukkit.getOnlinePlayers().forEach(player -> {
             users.add(new User(player));
@@ -60,7 +74,7 @@ public class DevathlonPlugin extends JavaPlugin {
         stateIterator = allStates.listIterator();
 
         currentGameState = stateIterator.next();
-        getCurrentGameState().onEnter();
+        //getCurrentGameState().onEnter();
     }
 
     // User related
@@ -115,16 +129,10 @@ public class DevathlonPlugin extends JavaPlugin {
     public void nextGamestate() {
 
         if (stateIterator.hasNext()) {
-            System.out.println("Debug 2");
-
             State next = stateIterator.next();
-            System.out.println(next.getClass().getSimpleName());
-
             getCurrentGameState().onQuit();
             next.onEnter();
-
             this.currentGameState = next;
-
         } else {
             Bukkit.broadcastMessage("Game Ended, restarting in 5 seconds.");
             getServer().getScheduler().runTaskLater(this, Bukkit::shutdown, 100L);
