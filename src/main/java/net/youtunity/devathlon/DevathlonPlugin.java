@@ -1,5 +1,6 @@
 package net.youtunity.devathlon;
 
+import net.youtunity.devathlon.state.State;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -7,8 +8,14 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class DevathlonPlugin extends JavaPlugin {
 
+    private State currentGameState = null;
+
     @Override
     public void onEnable() {
         getLogger().info("Enabled!");
     }
+
+
+
+    
 }
