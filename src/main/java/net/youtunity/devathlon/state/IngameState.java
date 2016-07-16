@@ -34,7 +34,8 @@ public class IngameState extends State {
         for (User user : plugin.getUsers()) {
             this.bossBar.addPlayer(user.getPlayer());
             Party party = plugin.findParty(user);
-            Kit kit = party.getAvailableKits().get(0);
+            Kit kit = party.getAvailableKits().get(1);
+            System.out.println(kit.getName());
             user.assignKit(kit);
             user.getKit().giveItems(user);
             user.getPlayer().getInventory().setHeldItemSlot(8);

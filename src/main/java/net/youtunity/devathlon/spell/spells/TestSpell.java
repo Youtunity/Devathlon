@@ -14,5 +14,7 @@ public class TestSpell implements Spell {
     @Override
     public void execute(SpellContext context) {
         context.getInvoker().getPlayer().sendMessage("Hello, my name is TestSpell .. lel");
+
+
     }
 }

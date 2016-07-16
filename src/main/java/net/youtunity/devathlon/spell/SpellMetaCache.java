@@ -1,5 +1,6 @@
 package net.youtunity.devathlon.spell;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 
 import java.util.HashMap;
@@ -13,6 +14,9 @@ public class SpellMetaCache {
     private static Map<Class<?>, SpellMeta> cache = Maps.newHashMap();
 
     public static SpellMeta get(Class<?> spell) {
+
+        Preconditions.checkNotNull(spell, "spell");
+
         SpellMeta spellMeta = cache.get(spell);
 
         if(spellMeta == null) {

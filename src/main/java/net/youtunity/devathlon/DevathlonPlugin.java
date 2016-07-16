@@ -1,17 +1,26 @@
 package net.youtunity.devathlon;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
 import net.youtunity.devathlon.config.DevathlonConfig;
 import net.youtunity.devathlon.kit.Kit;
 import net.youtunity.devathlon.party.Party;
+import net.youtunity.devathlon.party.PartyService;
+import net.youtunity.devathlon.party.SimplePartyService;
+import net.youtunity.devathlon.service.ServiceRegistry;
+import net.youtunity.devathlon.spell.Spell;
+import net.youtunity.devathlon.spell.SpellMetaCache;
+import net.youtunity.devathlon.spell.spells.ConfringoSpell;
 import net.youtunity.devathlon.spell.spells.TestSpell;
 import net.youtunity.devathlon.state.IngameState;
 import net.youtunity.devathlon.state.LobbyState;
 import net.youtunity.devathlon.state.State;
+import net.youtunity.devathlon.user.SimpleUserService;
 import net.youtunity.devathlon.user.User;
 import net.youtunity.devathlon.user.UserListener;
+import net.youtunity.devathlon.user.UserService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,97 +35,53 @@ public class DevathlonPlugin extends JavaPlugin {
 
     private DevathlonConfig config;
 
-    private Set<User> users = Sets.newHashSet();
-    private Set<Party> parties = Sets.newHashSet();
-
     private State currentGameState = null;
     private LinkedList<State> allStates = Lists.newLinkedList();
     private ListIterator<State> stateIterator = null;
 
     @Override
     public void onEnable() {
-        getLogger().info("Enabled!");
 
-        this.config = new DevathlonConfig();
+        //config
+        loadConfig();
 
-        try {
-            this.config.init(new File(getDataFolder() + File.separator + "config.yml"));
-            this.config.save(new File(getDataFolder() + File.separator + "config.yml"));
-        } catch (InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
+        //states
+        registerState(new LobbyState(this));
+        registerState(new IngameState(this));
 
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            users.add(new User(player));
-        });
+        //services
+        ServiceRegistry.registerService(UserService.class, new SimpleUserService(this));
+        ServiceRegistry.registerService(PartyService.class, new SimplePartyService());
 
+        //listener util inits
         new UserListener(this);
 
-        parties.add(new Party("1"));
-        parties.add(new Party("2"));
-        parties.add(new Party("3"));
-        parties.add(new Party("4"));
+        //start
+        prepareAndRunGame();
+    }
 
-        Kit kit = new Kit();
-        kit.addSpell(TestSpell.class, 0);
-
-        Party party = findParty("1");
-
-        party.assignAvailableKit(kit);
-
-        for (User user : getUsers()) {
-            party.join(user);
-        }
-
-        allStates.add(new LobbyState(this));
-        allStates.add(new IngameState(this));
-
+    private void prepareAndRunGame() {
         stateIterator = allStates.listIterator();
-
         currentGameState = stateIterator.next();
-        //getCurrentGameState().onEnter();
+        getCurrentGameState().onEnter();
     }
-
-    // User related
-
-    public Set<User> getUsers() {
-        return Collections.unmodifiableSet(users);
-    }
-
-    public User findUser(Player player) {
-        return getUsers().stream()
-                .filter(user -> user.getPlayer().equals(player))
-                .findFirst()
-                .orElse(null);
-    }
-
-
-    // PARTY RELATED
-
-    public Set<Party> getParties() {
-        return Collections.unmodifiableSet(parties);
-    }
-
-    public Party findParty(String partyName) {
-        return parties.stream()
-                .filter(party -> party.getDisplayName().equals(partyName))
-                .findFirst()
-                .orElse(null);
-    }
-
-    public Party findParty(User user) {
-        return parties.stream()
-                .filter(party -> party.getUsers().contains(user))
-                .findFirst()
-                .orElse(null);
-    }
-
 
     // STATE SYSTEM
 
-    public State getCurrentGameState() {
+    private void registerState(State state) {
+
+        if(stateIterator != null) {
+            // while not initialized, we can add states to them
+            this.allStates.add(state);
+            getLogger().info("Added '" + state.getClass().getSimpleName() + "' state!");
+        }
+    }
+
+    private State getCurrentGameState() {
         return this.currentGameState;
     }
+
+
 
     public boolean isGameState(Class<?> toCheck) {
         if(null == getCurrentGameState()) {
@@ -127,7 +92,6 @@ public class DevathlonPlugin extends JavaPlugin {
     }
 
     public void nextGamestate() {
-
         if (stateIterator.hasNext()) {
             State next = stateIterator.next();
             getCurrentGameState().onQuit();
@@ -136,6 +100,21 @@ public class DevathlonPlugin extends JavaPlugin {
         } else {
             Bukkit.broadcastMessage("Game Ended, restarting in 5 seconds.");
             getServer().getScheduler().runTaskLater(this, Bukkit::shutdown, 100L);
+        }
+    }
+
+    public DevathlonConfig getDevathlonConfig() {
+        return this.config;
+    }
+
+    // Config
+    private void loadConfig() {
+        this.config = new DevathlonConfig();
+
+        try {
+            this.config.init();
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
         }
     }
 }

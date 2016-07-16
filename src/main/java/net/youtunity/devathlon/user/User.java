@@ -18,8 +18,6 @@ public class User {
 
     private Map<String, Integer> cooldowns = Maps.newHashMap();
 
-
-
     public User(Player player) {
         this.player = player;
     }
@@ -34,5 +32,13 @@ public class User {
 
     public Kit getKit() {
         return kit;
+    }
+
+    public boolean isCooldown(String spell) {
+        return cooldowns.containsKey(spell);
+    }
+
+    public void cooldown(String spell, int cooldown) {
+        cooldowns.put(spell, cooldown);
     }
 }

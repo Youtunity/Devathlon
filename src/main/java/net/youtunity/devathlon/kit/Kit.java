@@ -20,9 +20,18 @@ import java.util.Set;
  */
 public class Kit {
 
+    private String name;
     private Map<Integer, Class<?>> availableSpells = Maps.newHashMap();
 
-    public void addSpell(Class<? extends Spell> spell, int slot) {
+    public Kit(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void addSpell(Class<?> spell, int slot) {
         availableSpells.put(slot, spell);
     }
 

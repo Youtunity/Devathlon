@@ -2,12 +2,15 @@ package net.youtunity.devathlon.spell.spells;
 
 import net.youtunity.devathlon.spell.Spell;
 import net.youtunity.devathlon.spell.SpellContext;
+import net.youtunity.devathlon.spell.SpellMeta;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
 /**
  * Created by thecrealm on 16.07.16.
  */
+@SpellMeta(name = "confringo", cooldown = 10, material = Material.STICK)
 public class ConfringoSpell implements Spell {
 
     private int maxLenght = 10;
