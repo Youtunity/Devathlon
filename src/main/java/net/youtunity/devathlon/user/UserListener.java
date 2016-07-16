@@ -38,7 +38,6 @@ public class UserListener implements Listener {
             int spellIndex = event.getNewSlot();
             System.out.println(spellIndex);
             Optional<Spell> spell = user.getKit().getSpell(spellIndex);
-
             if(spell.isPresent()) {
                 SpellExecuter.execute(user, spell.get());
             }

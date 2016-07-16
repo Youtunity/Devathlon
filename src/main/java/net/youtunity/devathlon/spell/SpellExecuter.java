@@ -13,11 +13,13 @@ import org.bukkit.Bukkit;
  */
 public class SpellExecuter {
 
+    private static DevathlonPlugin plugin;
     private static UserService userService;
     private static SpellService spellService;
     private static PartyService partyService;
 
     public static void init(DevathlonPlugin plugin) {
+        SpellExecuter.plugin = plugin;
         SpellExecuter.userService = ServiceRegistry.lookupService(UserService.class);
         SpellExecuter.spellService = ServiceRegistry.lookupService(SpellService.class);
         SpellExecuter.partyService = ServiceRegistry.lookupService(PartyService.class);
@@ -31,13 +33,13 @@ public class SpellExecuter {
         Party party = partyService.find(user).get();
 
         if(user.isCooldown(meta.name())) {
-            SpellContext context = new SpellContext(user, party);
+            SpellContext context = new SpellContext(plugin, user, party);
             context.setExecuted(false);
             return context;
         }
 
         user.cooldown(meta.name(), meta.cooldown());
-        SpellContext context = new SpellContext(user, party);
+        SpellContext context = new SpellContext(plugin, user, party);
         spell.execute(context);
         context.setExecuted(true);
         return context;

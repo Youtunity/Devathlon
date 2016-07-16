@@ -1,5 +1,6 @@
 package net.youtunity.devathlon.spell;
 
+import net.youtunity.devathlon.DevathlonPlugin;
 import net.youtunity.devathlon.party.Party;
 import net.youtunity.devathlon.user.User;
 
@@ -8,11 +9,13 @@ import net.youtunity.devathlon.user.User;
  */
 public class SpellContext {
 
+    private DevathlonPlugin plugin;
     private User user;
     private Party party;
     private boolean executed = false;
 
-    public SpellContext(User user, Party party) {
+    public SpellContext(DevathlonPlugin plugin, User user, Party party) {
+        this.plugin = plugin;
         this.user = user;
         this.party = party;
     }
@@ -23,6 +26,10 @@ public class SpellContext {
 
     public void setExecuted(boolean executed) {
         this.executed = executed;
+    }
+
+    public DevathlonPlugin getPlugin() {
+        return plugin;
     }
 
     public User getInvoker() {
