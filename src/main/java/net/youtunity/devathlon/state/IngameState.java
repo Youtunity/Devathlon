@@ -1,8 +1,10 @@
 package net.youtunity.devathlon.state;
 
 import net.youtunity.devathlon.DevathlonPlugin;
+import net.youtunity.devathlon.kit.Kit;
 import net.youtunity.devathlon.party.Party;
 import net.youtunity.devathlon.user.User;
+import org.bukkit.Bukkit;
 
 import java.util.Set;
 
@@ -21,9 +23,12 @@ public class IngameState extends State {
     public void onEnter() {
 
         for (User user : plugin.getUsers()) {
+            Party party = plugin.findParty(user);
+            Kit kit = party.getAvailableKits().get(0);
+            user.assignKit(kit);
             user.getKit().giveItems(user);
+            user.getPlayer().getInventory().setHeldItemSlot(8);
         }
-
     }
 
     @Override

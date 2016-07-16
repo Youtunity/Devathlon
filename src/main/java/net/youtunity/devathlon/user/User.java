@@ -24,6 +24,10 @@ public class User {
         return player;
     }
 
+    public void assignKit(Kit kit) {
+        this.kit = kit;
+    }
+
     public Kit getKit() {
         return kit;
     }

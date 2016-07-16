@@ -34,11 +34,16 @@ public class Kit {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
     public void giveItems(User user) {
 
+        System.out.println("PRE GIVE");
+
         availableSpells.forEach((integer, spell) -> {
+            System.out.println("GIVE");
             PlayerInventory inventory = user.getPlayer().getInventory();
             int offset = 36;
             SpellMeta meta = spell.getAnnotation(SpellMeta.class);

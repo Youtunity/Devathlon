@@ -24,27 +24,19 @@ public class UserListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-
     @EventHandler
-   public void onHotbar(PlayerItemHeldEvent event) {
+    public void onHotbar(PlayerItemHeldEvent event) {
         if(plugin.isGameState(IngameState.class)) {
+
             event.setCancelled(true);
             User user = plugin.findUser(event.getPlayer());
             int spellIndex = event.getNewSlot();
+
             Spell spell = user.getKit().createSpell(spellIndex);
-            SpellExecuter.execute(user, spell);
-        }
-   }
 
-    public void onInteract(PlayerInteractEvent event) {
-        if(event.getAction() != Action.PHYSICAL) {
-            User user = plugin.findUser(event.getPlayer());
-            if(user == null) {
-                return;
+            if(spell != null) {
+                SpellExecuter.execute(user, spell);
             }
-
-            SpellExecuter.execute(user, null);
-
         }
     }
 
