@@ -3,6 +3,7 @@ package net.youtunity.devathlon.party;
 import com.google.common.collect.Sets;
 import net.youtunity.devathlon.user.User;
 
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -11,7 +12,11 @@ import java.util.Set;
 public class Party {
 
     private Set<User> users = Sets.newHashSet();
+    private int health = 10; //TODO: maybe respawnable?
 
+    public Set<User> getUsers() {
+        return Collections.unmodifiableSet(users);
+    }
 
 
 }

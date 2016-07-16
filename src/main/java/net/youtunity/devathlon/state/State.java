@@ -5,7 +5,7 @@ package net.youtunity.devathlon.state;
  */
 public abstract class State {
 
-    abstract void onEnter();
+    public abstract void onEnter();
 
-    abstract void onQuit();
+    public abstract void onQuit();
 }
