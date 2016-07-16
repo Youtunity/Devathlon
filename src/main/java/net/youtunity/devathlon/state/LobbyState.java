@@ -6,12 +6,12 @@ package net.youtunity.devathlon.state;
 public class LobbyState extends State {
 
     @Override
-    void onEnter() {
+    public void onEnter() {
 
     }
 
     @Override
-    void onQuit() {
+    public void onQuit() {
 
     }
 }
