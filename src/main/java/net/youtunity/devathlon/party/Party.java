@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.youtunity.devathlon.kit.Kit;
 import net.youtunity.devathlon.user.User;
+import net.youtunity.devathlon.utils.Cuboid;
+import org.bukkit.Location;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +21,11 @@ public class Party {
     private Set<User> users = Sets.newHashSet();
     private List<Kit> availableKits = Lists.newArrayList();
 
+    private Cuboid lobbyCuboid;
+
+    private Location spawn;
+    private Location egg;
+
     public Party(String displayName) {
         this.displayName = displayName;
     }
@@ -27,7 +34,34 @@ public class Party {
         return displayName;
     }
 
-    //Kits
+    //Locations
+
+
+    public void setLobbyCuboid(Cuboid lobbyCuboid) {
+        this.lobbyCuboid = lobbyCuboid;
+    }
+
+    public Cuboid getLobbyCuboid() {
+        return lobbyCuboid;
+    }
+
+    public void setEgg(Location egg) {
+        this.egg = egg;
+    }
+
+    public Location getEgg() {
+        return egg;
+    }
+
+    public void setSpawn(Location spawn) {
+        this.spawn = spawn;
+    }
+
+    public Location getSpawn() {
+        return spawn;
+    }
+
+//Kits
 
     public List<Kit> getAvailableKits() {
         return availableKits;
@@ -41,6 +75,12 @@ public class Party {
 
     public void join(User user) {
         this.users.add(user);
+        user.getPlayer().sendMessage("You joined Party " + getDisplayName());
+    }
+
+    public void left(User user) {
+        this.users.remove(user);
+        user.getPlayer().sendMessage("You left Party " + getDisplayName());
     }
 
     public Set<User> getUsers() {

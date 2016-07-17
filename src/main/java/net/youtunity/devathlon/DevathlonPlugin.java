@@ -2,9 +2,13 @@ package net.youtunity.devathlon;
 
 import com.google.common.collect.Lists;
 import net.cubespace.Yamler.Config.InvalidConfigurationException;
+import net.cubespace.Yamler.Config.InvalidConverterException;
+import net.cubespace.Yamler.Config.YamlConfig;
+import net.cubespace.Yamler.Converter.Location;
 import net.youtunity.devathlon.config.DevathlonConfig;
 import net.youtunity.devathlon.kit.KitService;
 import net.youtunity.devathlon.kit.SimpleKitService;
+import net.youtunity.devathlon.party.Party;
 import net.youtunity.devathlon.party.PartyService;
 import net.youtunity.devathlon.party.SimplePartyService;
 import net.youtunity.devathlon.service.ServiceRegistry;
@@ -15,9 +19,11 @@ import net.youtunity.devathlon.state.IngameState;
 import net.youtunity.devathlon.state.LobbyState;
 import net.youtunity.devathlon.state.State;
 import net.youtunity.devathlon.user.SimpleUserService;
+import net.youtunity.devathlon.user.User;
 import net.youtunity.devathlon.user.UserListener;
 import net.youtunity.devathlon.user.UserService;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -50,15 +56,13 @@ public class DevathlonPlugin extends JavaPlugin {
         ServiceRegistry.registerService(KitService.class, new SimpleKitService(this));
         ServiceRegistry.registerService(PartyService.class, new SimplePartyService(this));
 
-        System.out.println("Bla " + ServiceRegistry.lookupService(SpellService.class).find("TestSpell").get().getClass().getSimpleName());
-
-        //listener util inits
+        //listener util utils
         SpellExecuter.init(this);
 
         new UserListener(this);
 
         //start
-        prepareAndRunGame();
+        //prepareAndRunGame();
     }
 
     private void prepareAndRunGame() {
@@ -113,8 +117,9 @@ public class DevathlonPlugin extends JavaPlugin {
         this.config = new DevathlonConfig();
 
         try {
+            this.config.addConverter(Location.class);
             this.config.init(new File(getDataFolder() + File.separator + "config.yml"));
-        } catch (InvalidConfigurationException e) {
+        } catch (InvalidConfigurationException | InvalidConverterException e) {
             e.printStackTrace();
         }
     }

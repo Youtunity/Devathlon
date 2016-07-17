@@ -10,6 +10,7 @@ import net.youtunity.devathlon.service.Initializable;
 import net.youtunity.devathlon.service.ServiceRegistry;
 import net.youtunity.devathlon.user.User;
 import net.youtunity.devathlon.user.UserService;
+import net.youtunity.devathlon.utils.Cuboid;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -36,6 +37,12 @@ public class SimplePartyService implements PartyService, Initializable {
 
             Party party = new Party(config.getPartyName());
 
+            party.setSpawn(config.getSpawn());
+            party.setEgg(config.getEgg());
+
+            Cuboid cuboid = new Cuboid(config.getCuboidOne(), config.getCuboidTwo());
+            party.setLobbyCuboid(cuboid);
+
             for (String kit : config.getKits()) {
                 Optional<Kit> found = kitService.find(kit);
                 if(found.isPresent()) {
@@ -52,6 +59,11 @@ public class SimplePartyService implements PartyService, Initializable {
 
             plugin.getLogger().info("Registered Party: " + party.getDisplayName() + " [" + kits + "]");
         }
+    }
+
+    @Override
+    public List<Party> getParties() {
+        return parties;
     }
 
     @Override

@@ -8,6 +8,9 @@ import net.youtunity.devathlon.user.User;
 import net.youtunity.devathlon.user.UserService;
 import org.bukkit.Bukkit;
 
+import java.util.Iterator;
+import java.util.Map;
+
 /**
  * Created by thecrealm on 16.07.16.
  */
@@ -51,7 +54,18 @@ public class SpellExecuter {
         public void run() {
 
             for (User user : userService.getUsers()) {
-                user.updateCooldown();
+
+                for(Iterator<Map.Entry<String, Integer>> it = user.getCooldowns().entrySet().iterator(); it.hasNext();) {
+                    Map.Entry<String, Integer> next = it.next();
+                    if(next.getValue() == 0) {
+                        it.remove();
+                    } else {
+                        int index = user.getKit().getSpellIndex(next.getKey());
+                        user.getPlayer().getInventory().getItem(index).setAmount(next.getValue());
+                    }
+
+                    next.setValue(next.getValue() -1);
+                }
             }
         }
     }

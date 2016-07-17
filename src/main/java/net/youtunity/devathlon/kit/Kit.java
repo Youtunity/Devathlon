@@ -36,6 +36,23 @@ public class Kit {
         return Optional.ofNullable(availableSpells.get(index));
     }
 
+    public int getSpellIndex(String name) {
+
+        SpellService spellService = ServiceRegistry.lookupService(SpellService.class);
+        Optional<Spell> spell = spellService.find(name);
+
+        if(spell.isPresent()) {
+            SpellMeta meta = spellService.lookupMeta(spell.get()).get();
+            for (Map.Entry<Integer, Spell> entry : availableSpells.entrySet()) {
+                if (meta.name().equals(spellService.lookupMeta(entry.getValue()).get().name())) {
+                    return entry.getKey();
+                }
+            }
+        }
+
+        return 0;
+    }
+
     public void giveItems(User user) {
         availableSpells.forEach((integer, spell) -> {
             PlayerInventory inventory = user.getPlayer().getInventory();

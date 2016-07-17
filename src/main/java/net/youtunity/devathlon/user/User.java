@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import net.youtunity.devathlon.kit.Kit;
 import org.bukkit.entity.Player;
 
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -42,13 +43,8 @@ public class User {
         cooldowns.put(spell, cooldown);
     }
 
-    public void updateCooldown() {
-        for (Map.Entry<String, Integer> entry : cooldowns.entrySet()) {
-            if(entry.getValue() == 0) {
-                cooldowns.remove(entry.getKey());
-            }
-
-            entry.setValue(entry.getValue() -1);
-        }
+    public Map<String, Integer> getCooldowns() {
+        return cooldowns;
     }
+
 }

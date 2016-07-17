@@ -1,4 +1,4 @@
-package net.youtunity.devathlon.spell.spells;
+package net.youtunity.devathlon.spell.spells.attack;
 
 import net.youtunity.devathlon.spell.Spell;
 import net.youtunity.devathlon.spell.SpellContext;
@@ -17,24 +17,17 @@ import java.util.concurrent.atomic.AtomicReference;
 @SpellMeta(name = "confringo", cooldown = 10, material = Material.STICK)
 public class ConfringoSpell implements Spell {
 
-    private int maxLenght = 10;
+    //Explosionszauber
 
     @Override
     public void execute(SpellContext context) {
 
-        context.getInvoker().getPlayer().sendMessage("Im  the confringo");
-
-        Location startLocation = context.getInvoker().getPlayer().getLocation().add(0, 1, 0);
+        Location startLocation = context.getInvoker().getPlayer().getLocation().add(0, 1.8, 0);
         AtomicReference<Location> custom = new AtomicReference<>(startLocation);
 
         SchedulerUtils.runTaskTimerRuns(context.getPlugin(), () -> {
-
-            custom.set(custom.get().add(startLocation.getDirection().multiply(0.1)));
-
+            custom.set(custom.get().add(startLocation.getDirection().multiply(0.3)));
             context.getInvoker().getPlayer().getWorld().spawnParticle(Particle.SNOWBALL, custom.get(), 10);
-
         }, 0L, 1L, 200);
-
     }
-    
 }
