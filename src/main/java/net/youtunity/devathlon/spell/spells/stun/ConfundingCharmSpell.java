@@ -61,9 +61,8 @@ public class ConfundingCharmSpell implements Spell {
 
                     if(!context.getParty().getUsers().contains(ServiceRegistry.lookupService(UserService.class).find(player).get())) {
                         this.cancel();
-                        context.getInvoker().getPlayer().sendMessage("You hit, yeah!");
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 50, 2, true, false));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 3, true, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 60, 2, true, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 3, true, false));
                         world.spawnParticle(Particle.CLOUD, loc, 15, 0.2D, 0.2D, 0.2D);
                     }
                 }

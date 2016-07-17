@@ -6,6 +6,7 @@ import net.youtunity.devathlon.spell.Spell;
 import net.youtunity.devathlon.spell.SpellMeta;
 import net.youtunity.devathlon.spell.SpellService;
 import net.youtunity.devathlon.user.User;
+import net.youtunity.devathlon.utils.GlowUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -57,7 +58,9 @@ public class Kit {
         availableSpells.forEach((integer, spell) -> {
             PlayerInventory inventory = user.getPlayer().getInventory();
             SpellMeta meta = ServiceRegistry.lookupService(SpellService.class).lookupMeta(spell).get();
-            inventory.setItem(integer, new ItemStack(meta.material()));
+            ItemStack itemStack = new ItemStack(meta.material());
+            GlowUtils.addGlow(itemStack);
+            inventory.setItem(integer, itemStack);
         });
     }
 }

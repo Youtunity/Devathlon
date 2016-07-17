@@ -8,6 +8,8 @@ import com.google.common.collect.Maps;
 import com.google.common.reflect.ClassPath;
 import net.youtunity.devathlon.DevathlonPlugin;
 import net.youtunity.devathlon.service.Initializable;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -41,6 +43,9 @@ public class SimpleSpellService implements SpellService, Initializable {
                     Object inst = clazz.newInstance();
                     if(inst.getClass().isAnnotationPresent(SpellMeta.class)) {
                         spells.add(((Spell) inst));
+                        if(inst instanceof Listener) {
+                            Bukkit.getPluginManager().registerEvents(((Listener) inst), plugin);
+                        }
                         plugin.getLogger().info("Registered Spell: " + info.getSimpleName());
                     } else {
                         plugin.getLogger().warning("Failed to register spell '" + info.getSimpleName() + "', Meta not present");

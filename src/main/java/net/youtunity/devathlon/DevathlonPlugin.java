@@ -62,7 +62,7 @@ public class DevathlonPlugin extends JavaPlugin {
         new UserListener(this);
 
         //start
-        //prepareAndRunGame();
+        prepareAndRunGame();
     }
 
     private void prepareAndRunGame() {

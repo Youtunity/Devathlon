@@ -61,7 +61,7 @@ public class Party {
         return spawn;
     }
 
-//Kits
+    //Kits
 
     public List<Kit> getAvailableKits() {
         return availableKits;

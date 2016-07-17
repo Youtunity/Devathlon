@@ -61,6 +61,7 @@ public class LobbyState extends State implements Listener {
         }.runTaskTimer(plugin, 0L, 20L);
 
         for (Player player : Bukkit.getOnlinePlayers()) {
+            player.getInventory().clear();
             player.teleport(plugin.getDevathlonConfig().getSpawn());
             bossBar.addPlayer(player);
         }
@@ -77,6 +78,7 @@ public class LobbyState extends State implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         this.bossBar.addPlayer(event.getPlayer());
+        event.getPlayer().getInventory().clear();
         event.getPlayer().teleport(plugin.getDevathlonConfig().getSpawn());
     }
 

@@ -6,6 +6,7 @@ import net.youtunity.devathlon.party.PartyService;
 import net.youtunity.devathlon.service.ServiceRegistry;
 import net.youtunity.devathlon.user.User;
 import net.youtunity.devathlon.user.UserService;
+import net.youtunity.devathlon.utils.GlowUtils;
 import org.bukkit.Bukkit;
 
 import java.util.Iterator;
@@ -45,6 +46,10 @@ public class SpellExecuter {
         SpellContext context = new SpellContext(plugin, user, party);
         spell.execute(context);
         context.setExecuted(true);
+
+        int spellIndex = user.getKit().getSpellIndex(meta.name());
+        GlowUtils.removeGlow(user.getPlayer().getInventory().getItem(spellIndex));
+
         return context;
     }
 
@@ -57,10 +62,12 @@ public class SpellExecuter {
 
                 for(Iterator<Map.Entry<String, Integer>> it = user.getCooldowns().entrySet().iterator(); it.hasNext();) {
                     Map.Entry<String, Integer> next = it.next();
+                    int index = user.getKit().getSpellIndex(next.getKey());
+
                     if(next.getValue() == 0) {
                         it.remove();
+                        GlowUtils.addGlow(user.getPlayer().getInventory().getItem(index));
                     } else {
-                        int index = user.getKit().getSpellIndex(next.getKey());
                         user.getPlayer().getInventory().getItem(index).setAmount(next.getValue());
                     }
 
