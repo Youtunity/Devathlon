@@ -1,6 +1,7 @@
 package net.youtunity.devathlon.state;
 
 import net.youtunity.devathlon.DevathlonPlugin;
+import net.youtunity.devathlon.kit.Kit;
 import net.youtunity.devathlon.party.Party;
 import net.youtunity.devathlon.party.PartyService;
 import net.youtunity.devathlon.service.ServiceRegistry;
@@ -14,11 +15,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -73,6 +76,29 @@ public class LobbyState extends State implements Listener {
     public void onQuit() {
         this.bossBar.setVisible(false);
         HandlerList.unregisterAll(this);
+
+        Random random = new Random();
+        for (User user : userService.getUsers()) {
+            Optional<Party> party = partyService.find(user);
+
+            if(!party.isPresent()) {
+                Party randomParty = partyService.getParties().get(random.nextInt(partyService.getParties().size()));
+                randomParty.join(user);
+                party = Optional.of(randomParty);
+            }
+
+            if(user.getKit() == null) {
+                Kit kit = party.get().getAvailableKits().get(random.nextInt(party.get().getAvailableKits().size()));
+                user.assignKit(kit);
+            }
+
+            user.getPlayer().sendMessage("You play as '" + user.getKit().getName() + "' for Party '" + party.get().getDisplayName() + "'");
+        }
+    }
+
+    @EventHandler
+    public void onDmg(EntityDamageByEntityEvent entityDamageByEntityEvent) {
+        entityDamageByEntityEvent.setCancelled(true);
     }
 
     @EventHandler

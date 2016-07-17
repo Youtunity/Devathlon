@@ -26,12 +26,22 @@ public class Party {
     private Location spawn;
     private Location egg;
 
+    private boolean isAlive = true;
+
     public Party(String displayName) {
         this.displayName = displayName;
     }
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setDead() {
+        isAlive = false;
     }
 
     //Locations

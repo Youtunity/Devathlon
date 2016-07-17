@@ -59,6 +59,7 @@ public class DevathlonPlugin extends JavaPlugin {
         //listener util utils
         SpellExecuter.init(this);
 
+        new WorldListener(this);
         new UserListener(this);
 
         //start

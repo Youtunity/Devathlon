@@ -6,10 +6,7 @@ import net.youtunity.devathlon.spell.SpellContext;
 import net.youtunity.devathlon.spell.SpellMeta;
 import net.youtunity.devathlon.user.UserService;
 import net.youtunity.devathlon.utils.SchedulerUtils;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -49,12 +46,12 @@ public class ConfundingCharmSpell implements Spell {
                 }
 
                 loc = loc.add(loc.getDirection().multiply(0.4));
-
-                context.getInvoker().getPlayer().getWorld().spawnParticle(Particle.CLOUD, loc, 5);
+                context.getInvoker().getPlayer().getWorld().playEffect(loc, Effect.FIREWORKS_SPARK, 8);
 
                 Optional<Entity> first = world.getNearbyEntities(loc, 1, 1, 1).stream()
                         .filter(entity -> entity instanceof Player)
                         .findFirst();
+
 
                 if(first.isPresent()) {
                     Player player = (Player) first.get();
@@ -63,7 +60,7 @@ public class ConfundingCharmSpell implements Spell {
                         this.cancel();
                         player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 60, 2, true, false));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 3, true, false));
-                        world.spawnParticle(Particle.CLOUD, loc, 15, 0.2D, 0.2D, 0.2D);
+                        world.spawnParticle(Particle.CLOUD, loc, 20, 0.2D, 0.2D, 0.2D);
                     }
                 }
             }

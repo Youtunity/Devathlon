@@ -13,5 +13,6 @@ public class StupefySpell implements Spell {
     @Override
     public void execute(SpellContext context) {
 
+
     }
 }
