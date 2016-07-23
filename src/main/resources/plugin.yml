@@ -1,4 +1,0 @@
-name: Devathlon
-version: 0.1
-main: net.youtunity.devathlon.DevathlonPlugin
-depend: [Yamler]
