@@ -7,8 +7,8 @@ import io.netty.buffer.ByteBuf;
  */
 public interface Message {
 
-    void encode(ByteBuf reader);
+    void encode(ByteBuf writer);
 
-    void decode(ByteBuf writer);
+    void decode(ByteBuf reader);
 
 }

@@ -6,6 +6,18 @@ package net.youtunity.devathlon.daemon;
 public class Bootstrap {
 
     public static void main(String[] args) {
-        System.out.println("TEST");
+
+        Daemon daemon = Daemon.getInstance();
+        daemon.init(args);
+
+
+        //Sleep Loop
+        while (true) {
+            try {
+                Thread.sleep(Long.MAX_VALUE);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

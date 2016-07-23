@@ -4,11 +4,15 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import net.youtunity.devathlon.api.net.message.Message;
 import net.youtunity.devathlon.api.net.message.MessageRegistry;
 import net.youtunity.devathlon.api.net.pipeline.MessageDecoder;
 import net.youtunity.devathlon.api.net.pipeline.MessageEncoder;
 import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
+
+import java.util.function.Consumer;
 
 /**
  * Created by thecrealm on 23.07.16.
@@ -16,6 +20,7 @@ import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
 public class NettyClient implements NetworkBase {
 
     private MessageRegistry registry = new MessageRegistry();
+    private ClientObserver observer;
     private MessageHandler handler;
 
     public void connect(String host, int port) {
@@ -25,7 +30,7 @@ public class NettyClient implements NetworkBase {
                 System.out.println("Successfully connected!");
             } else {
                 System.out.println("Failed to connect to server!");
-                onError(future.cause());
+                callObserver(clientObserver -> clientObserver.onError(future.cause()));
             }
         });
     }
@@ -39,6 +44,8 @@ public class NettyClient implements NetworkBase {
 
         return new Bootstrap()
                 .group(new NioEventLoopGroup())
+                .channel(NioSocketChannel.class)
+                .option(ChannelOption.SO_KEEPALIVE, true)
                 .handler(new ChannelInitializer<SocketChannel>() {
 
                     @Override
@@ -47,25 +54,26 @@ public class NettyClient implements NetworkBase {
                         pipe.addLast(new MessageEncoder(NettyClient.this));
                         pipe.addLast(new MessageDecoder(NettyClient.this));
 
-                        NettyClient.this.handler = new MessageHandler(NettyClient.this);
-                        pipe.addLast(NettyClient.this.handler);
+                        MessageHandler handler = new MessageHandler(NettyClient.this);
+                        pipe.addLast(handler);
 
                         handler.setObserver(new MessageHandler.HandlerObserver() {
 
                             @Override
-                            public void onActive(ChannelHandlerContext ctx) {
+                            public void onActive(MessageHandler handler) {
 
                                 //You can now send messages between the netty transport endpoints
-                                NettyClient.this.onReady();
+                                NettyClient.this.handler = handler;
+                                callObserver(ClientObserver::onReady);
                             }
 
                             @Override
-                            public void onInactive(ChannelHandlerContext ctx) {
+                            public void onInactive(MessageHandler handler) {
 
                             }
 
                             @Override
-                            public void onMessage(ChannelHandlerContext ctx, Message message) {
+                            public void onMessage(MessageHandler handler, Message message) {
 
                             }
                         });
@@ -73,14 +81,22 @@ public class NettyClient implements NetworkBase {
                 });
     }
 
-    /**
-     * Override this method to determine the connected state
-     */
-    public void onReady() {
-
+    public void setObserver(ClientObserver observer) {
+        this.observer = observer;
     }
 
-    public void onError(Throwable throwable) {
+    private void callObserver(Consumer<ClientObserver> consumer) {
+        if(this.observer != null) {
+            consumer.accept(this.observer);
+        }
+    }
+
+
+    public static interface ClientObserver {
+
+        public void onReady();
+
+        public void onError(Throwable throwable);
 
     }
 }

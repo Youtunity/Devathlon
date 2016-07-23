@@ -12,8 +12,11 @@ public class MessageRegistry {
     private Map<Integer, Class<?>> idMessageMap = new ConcurrentHashMap<>();
 
     public void register(Class<?> message, MessageHandler<?> handler) {
-        messageHandlerMap.put(message, handler);
         idMessageMap.put(lookupId(message), message);
+
+        if(handler != null) {
+            messageHandlerMap.put(message, handler);
+        }
     }
 
     public int lookupId(Class<?> message) {
