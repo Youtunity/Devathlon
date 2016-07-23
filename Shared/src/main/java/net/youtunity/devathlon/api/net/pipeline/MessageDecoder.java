@@ -5,6 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import net.youtunity.devathlon.api.net.NetworkBase;
 import net.youtunity.devathlon.api.net.message.Message;
+import net.youtunity.devathlon.api.net.util.ByteBufUtils;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class MessageDecoder extends MessageToMessageDecoder<ByteBuf> {
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> out) throws Exception {
 
         int id = byteBuf.readInt();
+        System.out.println("DECODE ID: " + id);
         Message message = base.getMessageRegistry().createMessage(id);
         message.decode(byteBuf);
 

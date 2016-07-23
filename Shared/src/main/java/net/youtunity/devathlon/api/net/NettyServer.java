@@ -11,9 +11,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import net.youtunity.devathlon.api.net.message.Message;
 import net.youtunity.devathlon.api.net.message.MessageRegistry;
-import net.youtunity.devathlon.api.net.pipeline.MessageDecoder;
-import net.youtunity.devathlon.api.net.pipeline.MessageEncoder;
-import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
+import net.youtunity.devathlon.api.net.pipeline.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +62,10 @@ public class NettyServer implements NetworkBase {
                     public void initChannel(SocketChannel channel) throws Exception {
                         ChannelPipeline pipe = channel.pipeline();
 
-                        pipe.addLast(new MessageEncoder(NettyServer.this));
+                        pipe.addLast(new LenghtDecoder());
                         pipe.addLast(new MessageDecoder(NettyServer.this));
+                        pipe.addLast(new LenghtEncoder());
+                        pipe.addLast(new MessageEncoder(NettyServer.this));
 
                         MessageHandler newHandler = new MessageHandler(NettyServer.this);
                         pipe.addLast(newHandler);

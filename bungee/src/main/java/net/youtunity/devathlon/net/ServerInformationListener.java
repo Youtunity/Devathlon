@@ -24,5 +24,7 @@ public class ServerInformationListener implements MessageHandler<ServerInformati
         context.setHost(message.getHost());
         context.setPort(message.getPort());
         context.setMotd(message.getMotd());
+
+        System.out.println(context.getHost() + ":" + context.getPort());
     }
 }

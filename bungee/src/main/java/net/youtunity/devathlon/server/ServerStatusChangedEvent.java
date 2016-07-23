@@ -8,18 +8,12 @@ import net.youtunity.devathlon.api.ServerStatus;
  */
 public class ServerStatusChangedEvent extends Event {
 
-    private String server;
     private ServerStatus newStatus;
     private ServerContext context;
 
-    public ServerStatusChangedEvent(String server, ServerStatus newStatus, ServerContext context) {
-        this.server = server;
+    public ServerStatusChangedEvent(ServerStatus newStatus, ServerContext context) {
         this.newStatus = newStatus;
         this.context = context;
-    }
-
-    public String getServer() {
-        return server;
     }
 
     public ServerStatus getNewStatus() {

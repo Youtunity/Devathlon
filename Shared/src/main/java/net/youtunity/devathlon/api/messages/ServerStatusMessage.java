@@ -24,14 +24,14 @@ public class ServerStatusMessage implements Message {
     @Override
     public void encode(ByteBuf writer) {
         ByteBufUtils.writeString(this.server, writer);
-        ByteBufUtils.writeVarInt(status.ordinal(), writer);
+        writer.writeInt(status.ordinal());
 
     }
 
     @Override
     public void decode(ByteBuf reader) {
         this.server = ByteBufUtils.readString(reader);
-        this.status = ServerStatus.values()[ByteBufUtils.readVarInt(reader)];
+        this.status = ServerStatus.values()[reader.readInt()];
     }
 
     public String getServer() {
@@ -41,4 +41,5 @@ public class ServerStatusMessage implements Message {
     public ServerStatus getStatus() {
         return status;
     }
+
 }

@@ -29,7 +29,7 @@ public class ServerInformationMessage implements Message {
     public void encode(ByteBuf writer) {
         ByteBufUtils.writeString(server, writer);
         ByteBufUtils.writeString(host, writer);
-        ByteBufUtils.writeVarInt(port, writer);
+        writer.writeInt(port);
         ByteBufUtils.writeString(motd, writer);
     }
 
@@ -37,7 +37,7 @@ public class ServerInformationMessage implements Message {
     public void decode(ByteBuf reader) {
         this.server = ByteBufUtils.readString(reader);
         this.host = ByteBufUtils.readString(reader);
-        this.port = ByteBufUtils.readVarInt(reader);
+        this.port = reader.readInt();
         this.motd = ByteBufUtils.readString(reader);
     }
 
@@ -56,4 +56,5 @@ public class ServerInformationMessage implements Message {
     public String getMotd() {
         return motd;
     }
+
 }

@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import net.youtunity.devathlon.api.net.NetworkBase;
 import net.youtunity.devathlon.api.net.message.Message;
+import net.youtunity.devathlon.api.net.util.ByteBufUtils;
 
 import java.util.List;
 
@@ -27,9 +28,9 @@ public class MessageEncoder extends MessageToMessageEncoder<Message> {
         ByteBuf byteBuf = Unpooled.buffer();
 
         int id = base.getMessageRegistry().lookupId(message.getClass());
+        System.out.println("ENCODE: " + id);
         byteBuf.writeInt(id);
         message.encode(byteBuf);
-
         out.add(byteBuf);
     }
 }

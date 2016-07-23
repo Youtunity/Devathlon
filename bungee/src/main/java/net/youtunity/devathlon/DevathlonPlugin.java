@@ -50,6 +50,10 @@ public class DevathlonPlugin extends Plugin {
 
     }
 
+    public NettyClient getClient() {
+        return client;
+    }
+
     public ServerRegistry getServerRegistry() {
         return serverRegistry;
     }

@@ -31,4 +31,5 @@ public class ServerStartupRequestMessage implements Message {
     public String getServer() {
         return server;
     }
+
 }

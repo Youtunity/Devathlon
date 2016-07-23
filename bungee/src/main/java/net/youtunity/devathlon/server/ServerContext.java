@@ -22,8 +22,12 @@ public class ServerContext {
         System.out.println("CTX " + server);
         this.server = server;
         this.host = "default";
-        this.port = -1;
+        this.port = 1;
         this.motd = server + "'s Server";
+    }
+
+    public String getServer() {
+        return server;
     }
 
     public String getHost() {
@@ -54,17 +58,12 @@ public class ServerContext {
         return serverStatus;
     }
 
+    public ServerInfo getServerInfo() {
+        return ProxyServer.getInstance().constructServerInfo(server, new InetSocketAddress(host, port), motd, false);
+    }
+
     public void doStatusChange(ServerStatus newStatus) {
         this.serverStatus = newStatus;
-
-        switch (newStatus) {
-            case RUNNING:
-                ServerInfo info = ProxyServer.getInstance().constructServerInfo(server, InetSocketAddress.createUnresolved(host, port), motd, false);
-                ProxyServer.getInstance().getServers().put(server, info);
-            case STOPPING:
-                ProxyServer.getInstance().getServers().remove(server);
-        }
-
-        ProxyServer.getInstance().getPluginManager().callEvent(new ServerStatusChangedEvent(server, newStatus, this));
+        ProxyServer.getInstance().getPluginManager().callEvent(new ServerStatusChangedEvent(newStatus, this));
     }
 }

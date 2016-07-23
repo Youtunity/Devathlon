@@ -20,7 +20,7 @@ public class MessageRegistry {
     }
 
     public int lookupId(Class<?> message) {
-        return message.hashCode();
+        return message.getName().hashCode();
     }
 
     @SuppressWarnings("unchecked")

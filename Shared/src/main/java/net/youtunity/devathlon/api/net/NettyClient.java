@@ -8,9 +8,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import net.youtunity.devathlon.api.net.message.Message;
 import net.youtunity.devathlon.api.net.message.MessageRegistry;
-import net.youtunity.devathlon.api.net.pipeline.MessageDecoder;
-import net.youtunity.devathlon.api.net.pipeline.MessageEncoder;
-import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
+import net.youtunity.devathlon.api.net.pipeline.*;
 
 import java.util.function.Consumer;
 
@@ -35,6 +33,10 @@ public class NettyClient implements NetworkBase {
         });
     }
 
+    public MessageHandler getHandler() {
+        return handler;
+    }
+
     @Override
     public MessageRegistry getMessageRegistry() {
         return this.registry;
@@ -51,10 +53,12 @@ public class NettyClient implements NetworkBase {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         ChannelPipeline pipe = socketChannel.pipeline();
-                        pipe.addLast(new MessageEncoder(NettyClient.this));
+                        pipe.addLast(new LenghtDecoder());
                         pipe.addLast(new MessageDecoder(NettyClient.this));
+                        pipe.addLast(new LenghtEncoder());
+                        pipe.addLast(new MessageEncoder(NettyClient.this));
 
-                        MessageHandler handler = new MessageHandler(NettyClient.this);
+                        NettyClient.this.handler = new MessageHandler(NettyClient.this);
                         pipe.addLast(handler);
 
                         handler.setObserver(new MessageHandler.HandlerObserver() {
