@@ -3,8 +3,15 @@ package net.youtunity.devathlon;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.youtunity.devathlon.api.net.NettyClient;
-import net.youtunity.devathlon.net.ServerInformationListener;
-import net.youtunity.devathlon.net.ServerStatusListener;
+import net.youtunity.devathlon.api.protocol.control.ServerStartRequest;
+import net.youtunity.devathlon.api.protocol.control.ServerStopRequest;
+import net.youtunity.devathlon.api.protocol.event.RegisterListenerRequest;
+import net.youtunity.devathlon.api.protocol.event.UnregisterListenerRequest;
+import net.youtunity.devathlon.api.protocol.info.ServerInformationRequest;
+import net.youtunity.devathlon.api.protocol.info.ServerInformationResponse;
+import net.youtunity.devathlon.api.protocol.info.ServerStatusUpdate;
+import net.youtunity.devathlon.net.ServerInformationResponseHandler;
+import net.youtunity.devathlon.net.ServerStatusUpdateHandler;
 import net.youtunity.devathlon.server.ServerRegistry;
 
 /**
@@ -26,13 +33,18 @@ public class DevathlonPlugin extends Plugin {
         this.client = new NettyClient("127.0.0.1", 4040, true);
 
         // Out
-        this.client.getMessageRegistry().register(ServerStartupRequestMessage.class, null);
+        this.client.getMessageRegistry().register(ServerStartRequest.class, null);
+        this.client.getMessageRegistry().register(ServerStopRequest.class, null);
+        this.client.getMessageRegistry().register(RegisterListenerRequest.class, null);
+        this.client.getMessageRegistry().register(UnregisterListenerRequest.class, null);
+
 
         // In
-        this.client.getMessageRegistry().register(ServerInformationMessage.class, new ServerInformationListener(this));
-        this.client.getMessageRegistry().register(ServerStatusMessage.class, new ServerStatusListener(this));
+        this.client.getMessageRegistry().register(ServerInformationResponse.class, new ServerInformationResponseHandler(this));
+        this.client.getMessageRegistry().register(ServerStatusUpdate.class, new ServerStatusUpdateHandler(this));
 
         this.client.connect();
+        this.client.sendMessage(new ServerInformationRequest(null));
 
         ProxyServer.getInstance().getPluginManager().registerListener(this, new UserListener(this));
 

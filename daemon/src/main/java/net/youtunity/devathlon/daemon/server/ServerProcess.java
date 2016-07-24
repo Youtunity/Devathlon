@@ -71,7 +71,7 @@ public class ServerProcess {
 
         command += "-h 0.0.0.0 ";
 
-        int port = Daemon.getInstance().getServerRegistry().usePort();
+        int port = 8974;
         context.setPort(port);
         command += "-p " + port;
 

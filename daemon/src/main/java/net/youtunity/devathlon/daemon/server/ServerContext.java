@@ -1,6 +1,7 @@
 package net.youtunity.devathlon.daemon.server;
 
 import net.youtunity.devathlon.api.ServerStatus;
+import net.youtunity.devathlon.api.protocol.info.ServerInformationResponse;
 import net.youtunity.devathlon.api.protocol.info.ServerStatusUpdate;
 import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
 import net.youtunity.devathlon.daemon.Constants;
@@ -59,6 +60,10 @@ public class ServerContext {
         }
     }
 
+    public String getMotd() {
+        return "The cake smells like Straßenverkehrs-Ordnung!";
+    }
+
     public ServerDirectory getDirectory() {
         return directory;
     }
@@ -84,7 +89,7 @@ public class ServerContext {
         setStatus(ServerStatus.STARTING);
 
         for (MessageHandler handler : Daemon.getInstance().getServer().getHandlers()) {
-            handler.sendMessage(new ServerInformationMessage(server, host, port, server + "' Server"));
+            handler.sendMessage(new ServerInformationResponse(server, host, port, server + "' Server", ServerStatus.STARTING));
         }
     }
 

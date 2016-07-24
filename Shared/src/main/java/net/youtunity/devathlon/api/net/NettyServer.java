@@ -9,6 +9,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import net.youtunity.devathlon.api.net.message.Message;
 import net.youtunity.devathlon.api.net.message.MessageRegistry;
 import net.youtunity.devathlon.api.net.pipeline.*;
@@ -59,6 +60,9 @@ public class NettyServer implements NetworkBase {
                     @Override
                     public void initChannel(SocketChannel channel) throws Exception {
                         ChannelPipeline pipe = channel.pipeline();
+
+                        pipe.addLast(new IdleStateHandler(60, 0, 0));
+                        pipe.addLast(new IdleHandler());
 
                         pipe.addLast(new LenghtDecoder());
                         pipe.addLast(new MessageDecoder(NettyServer.this));

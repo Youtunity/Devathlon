@@ -62,4 +62,8 @@ public class ServerInformationResponse implements Message {
     public String getMotd() {
         return motd;
     }
+
+    public ServerStatus getStatus() {
+        return status;
+    }
 }

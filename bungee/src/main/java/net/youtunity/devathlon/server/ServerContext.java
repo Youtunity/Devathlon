@@ -63,6 +63,11 @@ public class ServerContext {
     }
 
     public void doStatusChange(ServerStatus newStatus) {
+
+        if(newStatus == serverStatus) {
+            return;
+        }
+
         this.serverStatus = newStatus;
         ProxyServer.getInstance().getPluginManager().callEvent(new ServerStatusChangedEvent(newStatus, this));
     }
