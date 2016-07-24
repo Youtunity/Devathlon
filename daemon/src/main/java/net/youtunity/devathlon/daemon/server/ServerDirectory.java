@@ -4,8 +4,6 @@ import net.youtunity.devathlon.daemon.Constants;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Properties;
 
 /**

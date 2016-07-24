@@ -3,8 +3,6 @@ package net.youtunity.devathlon;
 import net.youtunity.devathlon.api.net.NettyClient;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.logging.Level;
-
 /**
  * Created by thecrealm on 24.07.16.
  */

@@ -9,7 +9,6 @@ import net.youtunity.devathlon.api.net.message.Message;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Created by thecrealm on 23.07.16.
@@ -38,7 +37,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<Message> impleme
         //handle message
         net.youtunity.devathlon.api.net.message.MessageHandler<Message> handler = base.getMessageRegistry().lookupHandler(message.getClass());
 
-        if(handler != null) {
+        if (handler != null) {
             handler.handle(this, message);
         }
     }
@@ -60,7 +59,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<Message> impleme
     @Override
     public void sendMessage(Message message) {
 
-        if(isActive()) {
+        if (isActive()) {
             getChannel().writeAndFlush(message);
         } else {
             beforeActive.add(message);

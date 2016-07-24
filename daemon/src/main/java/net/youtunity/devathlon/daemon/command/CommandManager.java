@@ -28,7 +28,7 @@ public class CommandManager {
             String args[] = line.split(" ");
             CommandHandler commandHandler = lookupCommandHandler(args[0]);
 
-            if(commandHandler != null) {
+            if (commandHandler != null) {
                 commandHandler.execute(new CommandContext(args));
             }
         }

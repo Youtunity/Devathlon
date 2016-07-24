@@ -32,7 +32,7 @@ public class StreamGobbler extends Thread {
             System.err.println("std of stream was closed");
         } finally {
             try {
-                if(input != null) {
+                if (input != null) {
                     input.close();
                 }
             } catch (IOException e) {

@@ -18,7 +18,7 @@ public class ServerInformationRequest implements Message {
     }
 
     public ServerInformationRequest(String server) {
-        if(server == null) {
+        if (server == null) {
             this.bulkFlag = true;
             this.server = "useless";
         } else {

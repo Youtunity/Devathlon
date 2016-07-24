@@ -1,10 +1,12 @@
 package net.youtunity.devathlon.api.net;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import net.youtunity.devathlon.api.net.message.Message;
@@ -15,10 +17,8 @@ import net.youtunity.devathlon.api.net.util.ReconnectListener;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.function.Consumer;
 
 /**
  * Created by thecrealm on 23.07.16.
@@ -51,7 +51,7 @@ public class NettyClient implements NetworkBase, Transport {
         ChannelFuture channelFuture = bootstrap.connect();
 
         channelFuture.addListener(future -> {
-            if(!future.isSuccess()) {
+            if (!future.isSuccess()) {
                 reconnectListener.scheduleReconnect();
                 System.out.println("Failed to connect, reconnecting..");
                 return;
@@ -81,7 +81,7 @@ public class NettyClient implements NetworkBase, Transport {
     @Override
     public void sendMessage(Message message) {
 
-        if(channel != null && channel.isActive()) {
+        if (channel != null && channel.isActive()) {
             channel.writeAndFlush(message);
         } else {
             beforeActive.add(message);

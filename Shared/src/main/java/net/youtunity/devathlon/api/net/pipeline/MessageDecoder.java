@@ -5,7 +5,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import net.youtunity.devathlon.api.net.NetworkBase;
 import net.youtunity.devathlon.api.net.message.Message;
-import net.youtunity.devathlon.api.net.util.ByteBufUtils;
 
 import java.util.List;
 

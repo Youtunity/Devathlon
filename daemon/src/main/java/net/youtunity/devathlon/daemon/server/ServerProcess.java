@@ -2,10 +2,8 @@ package net.youtunity.devathlon.daemon.server;
 
 import net.youtunity.devathlon.api.ServerStatus;
 import net.youtunity.devathlon.daemon.Constants;
-import net.youtunity.devathlon.daemon.Daemon;
 import net.youtunity.devathlon.daemon.util.StreamGobbler;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -34,7 +32,7 @@ public class ServerProcess {
                     @Override
                     protected void onLine(String line) {
 
-                        if(line.contains("INFO]: Done")) {
+                        if (line.contains("INFO]: Done")) {
                             //Server started, yay
                             context.setStatus(ServerStatus.RUNNING);
                         }

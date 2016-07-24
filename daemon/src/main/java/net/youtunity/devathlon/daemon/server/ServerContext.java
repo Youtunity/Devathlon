@@ -1,11 +1,12 @@
 package net.youtunity.devathlon.daemon.server;
 
 import net.youtunity.devathlon.api.ServerStatus;
+import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
 import net.youtunity.devathlon.api.protocol.info.ServerInformationResponse;
 import net.youtunity.devathlon.api.protocol.info.ServerStatusUpdate;
-import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
 import net.youtunity.devathlon.daemon.Constants;
 import net.youtunity.devathlon.daemon.Daemon;
+import net.youtunity.devathlon.daemon.server.persistence.PersistenceContext;
 
 /**
  * Created by thecrealm on 23.07.16.
@@ -18,6 +19,7 @@ public class ServerContext {
     private ServerDirectory directory;
 
     private String host = "0.0.0.0";
+    private String motd;
     private int port = -1;
 
     public ServerContext(String server) {
@@ -29,16 +31,11 @@ public class ServerContext {
         return server;
     }
 
-    public ServerStatus getStatus() {
-        return status;
-    }
-
     public String getHost() {
         return host;
     }
 
-    //package local
-    void setHost(String newHost) {
+    public void setHost(String newHost) {
         this.host = newHost;
     }
 
@@ -46,13 +43,15 @@ public class ServerContext {
         return port;
     }
 
-    //package local
-    void setPort(int newPort) {
+    public void setPort(int newPort) {
         this.port = newPort;
     }
 
-    //package local
-    void setStatus(ServerStatus newStatus) {
+    public ServerStatus getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(ServerStatus newStatus) {
         this.status = newStatus;
 
         for (MessageHandler handler : Daemon.getInstance().getServer().getHandlers()) {
@@ -61,7 +60,16 @@ public class ServerContext {
     }
 
     public String getMotd() {
-        return "The cake smells like Straßenverkehrs-Ordnung!";
+        return this.motd;
+    }
+
+    public void setMotd(String motd) {
+        if (this.motd != null) {
+            PersistenceContext.updateMotd(server, motd);
+            Daemon.getInstance().broadcastMessage(new ServerInformationResponse(getServer(), getHost(), getPort(), getMotd(), getStatus()));
+        }
+
+        this.motd = motd;
     }
 
     public ServerDirectory getDirectory() {
@@ -70,7 +78,7 @@ public class ServerContext {
 
     public void setRunning(boolean running) {
 
-        if(getStatus() == ServerStatus.RUNNING && !running) {
+        if (getStatus() == ServerStatus.RUNNING && !running) {
             stopServer();
         } else if (getStatus() == ServerStatus.OFFLINE && running) {
             starServer();
@@ -79,18 +87,16 @@ public class ServerContext {
 
     private void starServer() {
 
-        if(!directory.checkFiles()) {
+        if (!directory.checkFiles()) {
             directory.mkdirs();
             directory.copyTemplate("default"); // DEFAULT TEMPLATE, later you can choose :3
         }
 
         this.process = new ServerProcess(this);
         this.process.start();
-        setStatus(ServerStatus.STARTING);
 
-        for (MessageHandler handler : Daemon.getInstance().getServer().getHandlers()) {
-            handler.sendMessage(new ServerInformationResponse(server, host, port, server + "' Server", ServerStatus.STARTING));
-        }
+        setStatus(ServerStatus.STARTING);
+        Daemon.getInstance().broadcastMessage(new ServerInformationResponse(server, host, port, server + "' Server", ServerStatus.STARTING));
     }
 
     private void stopServer() {

@@ -17,12 +17,12 @@ public class LenghtDecoder extends ByteToMessageDecoder {
         while (byteBuf.readableBytes() > 0) {
             byteBuf.markReaderIndex();
 
-            if(byteBuf.readableBytes() < 4) {
+            if (byteBuf.readableBytes() < 4) {
                 return;
             }
 
             int readableBytes = byteBuf.readInt();
-            if(byteBuf.readableBytes() < readableBytes) {
+            if (byteBuf.readableBytes() < readableBytes) {
                 byteBuf.resetReaderIndex();
                 return;
             }

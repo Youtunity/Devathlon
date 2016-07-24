@@ -13,7 +13,7 @@ public class ServerRegistry {
     public ServerContext lookupContext(String server) {
         ServerContext context = servers.get(server);
 
-        if(context == null) {
+        if (context == null) {
             context = new ServerContext(server);
             servers.put(server, context);
         }

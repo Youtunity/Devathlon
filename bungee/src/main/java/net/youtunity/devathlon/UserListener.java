@@ -30,8 +30,8 @@ public class UserListener implements Listener {
     @EventHandler
     public void onStateChanged(ServerStatusChangedEvent e) {
 
-        if(e.getNewStatus() == ServerStatus.RUNNING) {
-            if(players.containsKey(e.getContext().getServer())) {
+        if (e.getNewStatus() == ServerStatus.RUNNING) {
+            if (players.containsKey(e.getContext().getServer())) {
                 players.get(e.getContext().getServer()).forEach(proxiedPlayer -> proxiedPlayer.connect(e.getContext().getServerInfo()));
             }
         }
@@ -56,7 +56,7 @@ public class UserListener implements Listener {
     @EventHandler
     public void onConnect(ServerConnectEvent event) {
 
-        if(!join.contains(event.getPlayer().getPendingConnection().getUniqueId())) {
+        if (!join.contains(event.getPlayer().getPendingConnection().getUniqueId())) {
             return;
         }
 
@@ -64,14 +64,14 @@ public class UserListener implements Listener {
         String host = event.getPlayer().getPendingConnection().getVirtualHost().getHostString();
         ServerContext context = plugin.getServerRegistry().lookupContext(host);
 
-        if(context.getServerStatus() == ServerStatus.RUNNING) {
+        if (context.getServerStatus() == ServerStatus.RUNNING) {
             event.setTarget(context.getServerInfo());
             event.getPlayer().sendMessage(TextComponent.fromLegacyText("The requested server is online, Welcome!"));
         } else {
             event.getPlayer().sendMessage(TextComponent.fromLegacyText("The requested server is offline, starting up for you.."));
             plugin.getClient().sendMessage(new ServerStartRequest(host));
 
-            if(!players.containsKey(host)) {
+            if (!players.containsKey(host)) {
                 players.put(host, new ArrayList<>());
             }
 

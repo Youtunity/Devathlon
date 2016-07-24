@@ -14,7 +14,7 @@ public class MessageRegistry {
     public void register(Class<?> message, MessageHandler<?> handler) {
         idMessageMap.put(lookupId(message), message);
 
-        if(handler != null) {
+        if (handler != null) {
             messageHandlerMap.put(message, handler);
         }
     }
@@ -32,7 +32,7 @@ public class MessageRegistry {
 
         Class<?> message = idMessageMap.get(id);
 
-        if(null == message) {
+        if (null == message) {
             throw new IllegalStateException("Message with id '" + id + "' does not exists");
         }
 

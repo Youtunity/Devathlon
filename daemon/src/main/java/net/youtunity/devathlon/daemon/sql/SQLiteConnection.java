@@ -28,14 +28,14 @@ public class SQLiteConnection {
 
     public void connect() {
 
-        if(connection != null) {
+        if (connection != null) {
             throw new IllegalStateException("SQLite connection already established!");
         }
 
         try {
             Class.forName("org.sqlite.JDBC");
             this.connection = DriverManager.getConnection("jdbc:sqlite:system.db");
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

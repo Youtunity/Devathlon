@@ -64,7 +64,7 @@ public class ServerContext {
 
     public void doStatusChange(ServerStatus newStatus) {
 
-        if(newStatus == serverStatus) {
+        if (newStatus == serverStatus) {
             return;
         }
 

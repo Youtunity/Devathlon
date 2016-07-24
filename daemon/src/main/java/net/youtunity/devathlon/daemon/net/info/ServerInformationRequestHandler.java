@@ -16,11 +16,15 @@ public class ServerInformationRequestHandler implements MessageHandler<ServerInf
 
     @Override
     public void handle(Transport transport, ServerInformationRequest message) {
-
         Map<String, ServerContext> servers = Daemon.getInstance().getServerRegistry().getServers();
 
-        servers.forEach((server, context) -> {
-            transport.sendMessage(new ServerInformationResponse(server, context.getHost(), context.getPort(), context.getMotd(), context.getStatus()));
-        });
+        if (message.isBulkRequest()) {
+            servers.forEach((server, context) -> {
+                transport.sendMessage(new ServerInformationResponse(server, context.getHost(), context.getPort(), context.getMotd(), context.getStatus()));
+            });
+        } else {
+            ServerContext context = servers.get(message.getServer());
+            transport.sendMessage(new ServerInformationResponse(context.getServer(), context.getHost(), context.getPort(), context.getMotd(), context.getStatus()));
+        }
     }
 }
