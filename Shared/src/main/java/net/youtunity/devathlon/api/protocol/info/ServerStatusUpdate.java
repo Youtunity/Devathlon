@@ -1,4 +1,4 @@
-package net.youtunity.devathlon.api.messages;
+package net.youtunity.devathlon.api.protocol.info;
 
 import io.netty.buffer.ByteBuf;
 import net.youtunity.devathlon.api.ServerStatus;
@@ -9,6 +9,8 @@ import net.youtunity.devathlon.api.net.util.ByteBufUtils;
  * Created by thecrealm on 24.07.16.
  */
 public class ServerStatusUpdate implements Message {
+
+    // DAEMON --> CLIENT
 
     private String server;
     private ServerStatus status;

@@ -1,8 +1,6 @@
 package net.youtunity.devathlon.net;
 
-import io.netty.channel.Channel;
 import net.youtunity.devathlon.DevathlonPlugin;
-import net.youtunity.devathlon.api.messages.ServerInformationMessage;
 import net.youtunity.devathlon.api.net.Transport;
 import net.youtunity.devathlon.api.net.message.MessageHandler;
 import net.youtunity.devathlon.server.ServerContext;

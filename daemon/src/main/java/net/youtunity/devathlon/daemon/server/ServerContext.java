@@ -1,7 +1,7 @@
 package net.youtunity.devathlon.daemon.server;
 
 import net.youtunity.devathlon.api.ServerStatus;
-import net.youtunity.devathlon.api.messages.ServerInformationMessage;
+import net.youtunity.devathlon.api.protocol.info.ServerStatusUpdate;
 import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
 import net.youtunity.devathlon.daemon.Constants;
 import net.youtunity.devathlon.daemon.Daemon;
@@ -55,7 +55,7 @@ public class ServerContext {
         this.status = newStatus;
 
         for (MessageHandler handler : Daemon.getInstance().getServer().getHandlers()) {
-            handler.sendMessage(new ServerStatusMessage(server, newStatus));
+            handler.sendMessage(new ServerStatusUpdate(server, newStatus));
         }
     }
 

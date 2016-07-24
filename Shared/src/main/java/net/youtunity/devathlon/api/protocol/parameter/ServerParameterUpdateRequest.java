@@ -1,4 +1,4 @@
-package net.youtunity.devathlon.api.messages;
+package net.youtunity.devathlon.api.protocol.parameter;
 
 import io.netty.buffer.ByteBuf;
 import net.youtunity.devathlon.api.net.message.Message;
@@ -7,16 +7,18 @@ import net.youtunity.devathlon.api.net.util.ByteBufUtils;
 /**
  * Created by thecrealm on 24.07.16.
  */
-public class ServerParameterUpdate implements Message {
+public class ServerParameterUpdateRequest implements Message {
+
+    // CLIENT --> DAEMON
 
     private String server;
     private String parameter;
     private String value;
 
-    public ServerParameterUpdate() {
+    public ServerParameterUpdateRequest() {
     }
 
-    public ServerParameterUpdate(String server, String parameter, String value) {
+    public ServerParameterUpdateRequest(String server, String parameter, String value) {
         this.server = server;
         this.parameter = parameter;
         this.value = value;

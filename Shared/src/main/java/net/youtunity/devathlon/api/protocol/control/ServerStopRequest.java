@@ -1,4 +1,4 @@
-package net.youtunity.devathlon.api.messages;
+package net.youtunity.devathlon.api.protocol.control;
 
 import io.netty.buffer.ByteBuf;
 import net.youtunity.devathlon.api.net.message.Message;
@@ -8,6 +8,8 @@ import net.youtunity.devathlon.api.net.util.ByteBufUtils;
  * Created by thecrealm on 24.07.16.
  */
 public class ServerStopRequest implements Message {
+
+    // CLIENT --> DAEMON
 
     private String server;
 

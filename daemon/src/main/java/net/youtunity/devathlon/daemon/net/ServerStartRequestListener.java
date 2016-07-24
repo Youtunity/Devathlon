@@ -1,7 +1,7 @@
 package net.youtunity.devathlon.daemon.net;
 
 import net.youtunity.devathlon.api.ServerStatus;
-import net.youtunity.devathlon.api.messages.ServerStartRequest;
+import net.youtunity.devathlon.api.protocol.control.ServerStartRequest;
 import net.youtunity.devathlon.api.net.Transport;
 import net.youtunity.devathlon.api.net.message.MessageHandler;
 import net.youtunity.devathlon.daemon.Daemon;

@@ -28,7 +28,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<Message> impleme
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         this.ctx = ctx;
 
-        // Send all messages which was added before the connection was established
+        // Send all protocol which was added before the connection was established
         beforeActive.forEach(this::sendMessage);
     }
 

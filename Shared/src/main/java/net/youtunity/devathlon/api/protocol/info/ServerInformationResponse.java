@@ -1,28 +1,32 @@
-package net.youtunity.devathlon.api.messages;
+package net.youtunity.devathlon.api.protocol.info;
 
 import io.netty.buffer.ByteBuf;
+import net.youtunity.devathlon.api.ServerStatus;
 import net.youtunity.devathlon.api.net.message.Message;
-import net.youtunity.devathlon.api.net.message.MessageHandler;
 import net.youtunity.devathlon.api.net.util.ByteBufUtils;
 
 /**
- * Created by thecrealm on 23.07.16.
+ * Created by thecrealm on 24.07.16.
  */
-public class ServerInformationMessage implements Message {
+public class ServerInformationResponse implements Message {
+
+    // DAEMON --> CLIENT
 
     private String server;
     private String host;
     private int port;
     private String motd;
+    private ServerStatus status;
 
-    public ServerInformationMessage() {
+    public ServerInformationResponse() {
     }
 
-    public ServerInformationMessage(String server, String host, int port, String motd) {
+    public ServerInformationResponse(String server, String host, int port, String motd, ServerStatus status) {
         this.server = server;
         this.host = host;
         this.port = port;
         this.motd = motd;
+        this.status = status;
     }
 
     @Override
@@ -31,6 +35,7 @@ public class ServerInformationMessage implements Message {
         ByteBufUtils.writeString(host, writer);
         writer.writeInt(port);
         ByteBufUtils.writeString(motd, writer);
+        writer.writeInt(status.ordinal());
     }
 
     @Override
@@ -39,6 +44,7 @@ public class ServerInformationMessage implements Message {
         this.host = ByteBufUtils.readString(reader);
         this.port = reader.readInt();
         this.motd = ByteBufUtils.readString(reader);
+        this.status = ServerStatus.values()[reader.readInt()];
     }
 
     public String getServer() {
@@ -56,5 +62,4 @@ public class ServerInformationMessage implements Message {
     public String getMotd() {
         return motd;
     }
-
 }
