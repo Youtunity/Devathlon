@@ -66,13 +66,13 @@ public class UserListener implements Listener {
 
         join.remove(event.getPlayer().getPendingConnection().getUniqueId());
         String host = event.getPlayer().getPendingConnection().getVirtualHost().getHostString();
+        ServerContext context = plugin.getServerRegistry().lookupContext(host);
 
-        if(ProxyServer.getInstance().getServers().containsKey(host)) {
-            event.setTarget(ProxyServer.getInstance().getServerInfo(host));
+        if(context.getServerStatus() == ServerStatus.RUNNING) {
+            event.setTarget(context.getServerInfo());
             event.getPlayer().sendMessage(TextComponent.fromLegacyText("The requested server is online, Welcome!"));
         } else {
             event.getPlayer().sendMessage(TextComponent.fromLegacyText("The requested server is offline, starting up for you.."));
-
             plugin.getClient().getHandler().getChannelHandlerContext().writeAndFlush(new ServerStartupRequestMessage(host));
 
             if(!players.containsKey(host)) {

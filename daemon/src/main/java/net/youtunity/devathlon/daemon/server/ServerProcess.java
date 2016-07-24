@@ -1,6 +1,7 @@
 package net.youtunity.devathlon.daemon.server;
 
 import net.youtunity.devathlon.api.ServerStatus;
+import net.youtunity.devathlon.daemon.Constants;
 import net.youtunity.devathlon.daemon.Daemon;
 import net.youtunity.devathlon.daemon.util.StreamGobbler;
 
@@ -59,14 +60,14 @@ public class ServerProcess {
 
     private ProcessBuilder build() {
         return new ProcessBuilder()
-                .directory(context.getDirectory())
+                .directory(context.getDirectory().asFile())
                 .command(buildArguments());
     }
 
     private String[] buildArguments() {
 
         String command = "";
-        command += "java -Dcom.mojang.eula.agree=true -jar spigot.jar ";
+        command += "java -Dcom.mojang.eula.agree=true -jar " + Constants.SPIGOT_JAR_NAME + " ";
 
         command += "-h 0.0.0.0 ";
 

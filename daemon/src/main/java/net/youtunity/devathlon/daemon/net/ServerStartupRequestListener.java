@@ -16,8 +16,6 @@ public class ServerStartupRequestListener implements MessageHandler<ServerStartu
     public void handle(Channel channel, ServerStartupRequestMessage message) {
         ServerContext context = Daemon.getInstance().getServerRegistry().lookupContext(message.getServer());
 
-        System.out.println("REQUESTED SERVER: " + message.getServer());
-
         if(context.getStatus() == ServerStatus.OFFLINE) {
             context.setRunning(true);
         }

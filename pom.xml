@@ -11,6 +11,7 @@
         <module>bungee</module>
         <module>Shared</module>
         <module>daemon</module>
+        <module>spigot</module>
     </modules>
 
     <build>

@@ -24,8 +24,6 @@ public class Daemon {
         return instance;
     }
 
-    private static final int DAEMON_DEFAULT_PORT = 4040;
-
     private NettyServer server;
     private ServerRegistry serverRegistry;
 
@@ -35,28 +33,6 @@ public class Daemon {
         this.serverRegistry = new ServerRegistry();
 
         this.server = new NettyServer();
-        setObserver();
-
-        // In
-        this.server.getMessageRegistry().register(ServerStartupRequestMessage.class, new ServerStartupRequestListener());
-
-        // Out
-        this.server.getMessageRegistry().register(ServerInformationMessage.class, null);
-        this.server.getMessageRegistry().register(ServerStatusMessage.class, null);
-
-        this.server.bind(DAEMON_DEFAULT_PORT);
-
-    }
-
-    public NettyServer getServer() {
-        return server;
-    }
-
-    public ServerRegistry getServerRegistry() {
-        return serverRegistry;
-    }
-
-    private void setObserver() {
 
         this.server.setObserver(new NettyServer.ServerObserver() {
 
@@ -70,5 +46,25 @@ public class Daemon {
                 System.out.println("BYE BYE");
             }
         });
+
+        // In
+        this.server.getMessageRegistry().register(ServerStartupRequestMessage.class, new ServerStartupRequestListener());
+
+        // Out
+        this.server.getMessageRegistry().register(ServerInformationMessage.class, null);
+        this.server.getMessageRegistry().register(ServerStatusMessage.class, null);
+
+        // Bind
+        this.server.bind(Constants.DAEMON_DEFAULT_PORT);
+
     }
+
+    public NettyServer getServer() {
+        return server;
+    }
+
+    public ServerRegistry getServerRegistry() {
+        return serverRegistry;
+    }
+
 }

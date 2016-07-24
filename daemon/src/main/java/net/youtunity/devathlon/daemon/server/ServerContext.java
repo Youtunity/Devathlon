@@ -4,6 +4,7 @@ import net.youtunity.devathlon.api.ServerStatus;
 import net.youtunity.devathlon.api.messages.ServerInformationMessage;
 import net.youtunity.devathlon.api.messages.ServerStatusMessage;
 import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
+import net.youtunity.devathlon.daemon.Constants;
 import net.youtunity.devathlon.daemon.Daemon;
 
 import java.io.File;
@@ -17,12 +18,14 @@ public class ServerContext {
     private String server;
     private ServerStatus status = ServerStatus.OFFLINE;
     private ServerProcess process;
+    private ServerDirectory directory;
 
     private String host = "0.0.0.0";
     private int port = -1;
 
     public ServerContext(String server) {
         this.server = server;
+        this.directory = new ServerDirectory(Constants.getServerDir(server));
     }
 
     public String getServer() {
@@ -60,13 +63,8 @@ public class ServerContext {
         }
     }
 
-    File getDirectory() {
-        File file = new File("servers/" + server);
-        if(!file.mkdirs()) {
-            return file;
-        } else {
-            throw new IllegalStateException("server context folder cannot be created.");
-        }
+    public ServerDirectory getDirectory() {
+        return directory;
     }
 
     public void setRunning(boolean running) {
@@ -79,13 +77,18 @@ public class ServerContext {
     }
 
     private void starServer() {
+
+        if(!directory.checkFiles()) {
+            directory.mkdirs();
+            directory.copyTemplate("default"); // DEFAULT TEMPLATE, later you can choose :3
+        }
+
         this.process = new ServerProcess(this);
         this.process.start();
         setStatus(ServerStatus.STARTING);
 
         for (MessageHandler handler : Daemon.getInstance().getServer().getHandlers()) {
-            System.out.println("SEND INFO MSG");
-            handler.getChannelHandlerContext().writeAndFlush(new ServerInformationMessage(server, host, port, "Its a motd"));
+            handler.getChannelHandlerContext().writeAndFlush(new ServerInformationMessage(server, host, port, server + "' Server"));
         }
     }
 
