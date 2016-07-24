@@ -1,11 +1,8 @@
 package net.youtunity.devathlon.daemon;
 
 import net.youtunity.devathlon.api.messages.ServerInformationMessage;
-import net.youtunity.devathlon.api.messages.ServerStartupRequestMessage;
-import net.youtunity.devathlon.api.messages.ServerStatusMessage;
 import net.youtunity.devathlon.api.net.NettyServer;
-import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
-import net.youtunity.devathlon.daemon.net.ServerStartupRequestListener;
+import net.youtunity.devathlon.daemon.net.ServerStartRequestListener;
 import net.youtunity.devathlon.daemon.server.ServerRegistry;
 
 /**
@@ -31,24 +28,10 @@ public class Daemon {
     void init(String[] args) {
 
         this.serverRegistry = new ServerRegistry();
-
         this.server = new NettyServer();
 
-        this.server.setObserver(new NettyServer.ServerObserver() {
-
-            @Override
-            public void onActiveHandler(MessageHandler handler) {
-                System.out.println("FUCK YEAH");
-            }
-
-            @Override
-            public void onInactiveHandler(MessageHandler handler) {
-                System.out.println("BYE BYE");
-            }
-        });
-
         // In
-        this.server.getMessageRegistry().register(ServerStartupRequestMessage.class, new ServerStartupRequestListener());
+        this.server.getMessageRegistry().register(ServerStartupRequestMessage.class, new ServerStartRequestListener());
 
         // Out
         this.server.getMessageRegistry().register(ServerInformationMessage.class, null);

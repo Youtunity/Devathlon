@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 public class NettyServer implements NetworkBase {
 
     private final MessageRegistry registry = new MessageRegistry();
-    private ServerObserver observer;
     private final List<MessageHandler> handlers = new ArrayList<>();
 
     /**
@@ -54,7 +53,6 @@ public class NettyServer implements NetworkBase {
 
         return new ServerBootstrap()
                 .group(new NioEventLoopGroup(), new NioEventLoopGroup())
-                .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
 
@@ -70,56 +68,12 @@ public class NettyServer implements NetworkBase {
                         MessageHandler newHandler = new MessageHandler(NettyServer.this);
                         pipe.addLast(newHandler);
 
-                        newHandler.setObserver(new MessageHandler.HandlerObserver() {
+                        handlers.add(newHandler);
 
-                            @Override
-                            public void onActive(MessageHandler handler) {
-
-                                System.out.println("Incomming connection, adding '" + handler.getChannelHandlerContext().channel().remoteAddress() + "'");
-
-                                synchronized (handlers) {
-                                    handlers.add(newHandler);
-                                }
-
-                                callObserver(serverObserver -> serverObserver.onActiveHandler(handler));
-                            }
-
-                            @Override
-                            public void onInactive(MessageHandler handler) {
-
-                                System.out.println("Connection become inactive, removing '" + handler.getChannelHandlerContext().channel().remoteAddress() + "'");
-
-                                synchronized (handlers) {
-                                    handlers.remove(newHandler);
-                                }
-
-                                callObserver(serverObserver -> serverObserver.onInactiveHandler(handler));
-                            }
-
-                            @Override
-                            public void onMessage(MessageHandler handler, Message message) {
-                                // Do nothing
-                            }
+                        channel.closeFuture().addListener(future -> {
+                           handlers.remove(newHandler);
                         });
                     }
                 });
-    }
-
-    public void setObserver(NettyServer.ServerObserver observer) {
-        this.observer = observer;
-    }
-
-    private void callObserver(Consumer<NettyServer.ServerObserver> consumer) {
-        if(this.observer != null) {
-            consumer.accept(this.observer);
-        }
-    }
-
-
-    public static interface ServerObserver {
-
-        void onActiveHandler(MessageHandler handler);
-
-        void onInactiveHandler(MessageHandler handler);
     }
 }

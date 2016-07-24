@@ -5,16 +5,16 @@ import net.youtunity.devathlon.api.net.message.Message;
 import net.youtunity.devathlon.api.net.util.ByteBufUtils;
 
 /**
- * Created by thecrealm on 23.07.16.
+ * Created by thecrealm on 24.07.16.
  */
-public class ServerStartupRequestMessage implements Message {
+public class ServerStartRequest implements Message {
 
     private String server;
 
-    public ServerStartupRequestMessage() {
+    public ServerStartRequest() {
     }
 
-    public ServerStartupRequestMessage(String server) {
+    public ServerStartRequest(String server) {
         this.server = server;
     }
 
@@ -31,5 +31,4 @@ public class ServerStartupRequestMessage implements Message {
     public String getServer() {
         return server;
     }
-
 }

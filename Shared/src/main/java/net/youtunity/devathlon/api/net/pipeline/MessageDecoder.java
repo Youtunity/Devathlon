@@ -24,7 +24,6 @@ public class MessageDecoder extends MessageToMessageDecoder<ByteBuf> {
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> out) throws Exception {
 
         int id = byteBuf.readInt();
-        System.out.println("DECODE ID: " + id);
         Message message = base.getMessageRegistry().createMessage(id);
         message.decode(byteBuf);
 

@@ -21,14 +21,12 @@ public class MessageEncoder extends MessageToMessageEncoder<Message> {
         this.base = base;
     }
 
-
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Message message, List<Object> out) throws Exception {
 
         ByteBuf byteBuf = Unpooled.buffer();
 
         int id = base.getMessageRegistry().lookupId(message.getClass());
-        System.out.println("ENCODE: " + id);
         byteBuf.writeInt(id);
         message.encode(byteBuf);
         out.add(byteBuf);

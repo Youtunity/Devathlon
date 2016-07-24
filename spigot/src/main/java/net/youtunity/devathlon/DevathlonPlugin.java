@@ -15,20 +15,9 @@ public class DevathlonPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        this.client = new NettyClient();
-        this.client.setObserver(new NettyClient.ClientObserver() {
-            @Override
-            public void onReady() {
-                getLogger().info("Successfully connected to daemon");
-            }
+        this.client = new NettyClient("127.0.0.1", 4040, true);
 
-            @Override
-            public void onError(Throwable throwable) {
-                getLogger().log(Level.SEVERE, "Failed to connect to daemon", throwable);
-            }
-        });
-
-        this.client.connect("127.0.0.1", 4040);
+        this.client.connect();
     }
 
     public NettyClient getClient() {

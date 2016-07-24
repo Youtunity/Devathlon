@@ -1,20 +1,24 @@
 package net.youtunity.devathlon.api.net.pipeline;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import net.youtunity.devathlon.api.net.NetworkBase;
+import net.youtunity.devathlon.api.net.Transport;
 import net.youtunity.devathlon.api.net.message.Message;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
  * Created by thecrealm on 23.07.16.
  */
-public class MessageHandler extends SimpleChannelInboundHandler<Message> {
+public class MessageHandler extends SimpleChannelInboundHandler<Message> implements Transport {
 
     private NetworkBase base;
-    private HandlerObserver observer;
     private ChannelHandlerContext ctx;
+    private List<Message> beforeActive = new ArrayList<>();
 
     public MessageHandler(NetworkBase base) {
         this.base = base;
@@ -23,50 +27,43 @@ public class MessageHandler extends SimpleChannelInboundHandler<Message> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         this.ctx = ctx;
-        callObserver(handlerObserver -> handlerObserver.onActive(this));
-    }
 
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        callObserver(handlerObserver -> handlerObserver.onInactive(this));
+        // Send all messages which was added before the connection was established
+        beforeActive.forEach(this::sendMessage);
     }
 
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, Message message) throws Exception {
-        callObserver(handlerObserver -> handlerObserver.onMessage(this, message));
 
         //handle message
         net.youtunity.devathlon.api.net.message.MessageHandler<Message> handler = base.getMessageRegistry().lookupHandler(message.getClass());
 
         if(handler != null) {
-            handler.handle(ctx.channel(), message);
+            handler.handle(this, message);
         }
     }
 
-    private void callObserver(Consumer<HandlerObserver> consumer) {
-        if(this.observer != null) {
-            consumer.accept(this.observer);
+    @Override
+    public Channel getChannel() {
+        if (ctx != null) {
+            return ctx.channel();
         }
+
+        return null;
     }
 
-    /**
-     *
-     * @param observer
-     */
-    public void setObserver(HandlerObserver observer) {
-        this.observer = observer;
+    @Override
+    public boolean isActive() {
+        return getChannel() != null && getChannel().isActive();
     }
 
-    public ChannelHandlerContext getChannelHandlerContext() {
-        return ctx;
-    }
+    @Override
+    public void sendMessage(Message message) {
 
-    public interface HandlerObserver {
-
-        void onActive(MessageHandler handler);
-
-        void onInactive(MessageHandler handler);
-
-        void onMessage(MessageHandler handler, Message message);
+        if(isActive()) {
+            getChannel().writeAndFlush(message);
+        } else {
+            beforeActive.add(message);
+        }
     }
 }

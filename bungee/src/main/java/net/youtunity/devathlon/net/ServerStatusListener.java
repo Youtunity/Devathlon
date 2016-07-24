@@ -1,8 +1,7 @@
 package net.youtunity.devathlon.net;
 
-import io.netty.channel.Channel;
 import net.youtunity.devathlon.DevathlonPlugin;
-import net.youtunity.devathlon.api.messages.ServerStatusMessage;
+import net.youtunity.devathlon.api.net.Transport;
 import net.youtunity.devathlon.api.net.message.MessageHandler;
 
 /**
@@ -17,7 +16,7 @@ public class ServerStatusListener implements MessageHandler<ServerStatusMessage>
     }
 
     @Override
-    public void handle(Channel channel, ServerStatusMessage message) {
+    public void handle(Transport transport, ServerStatusMessage message) {
         plugin.getServerRegistry().lookupContext(message.getServer()).doStatusChange(message.getStatus());
     }
 }

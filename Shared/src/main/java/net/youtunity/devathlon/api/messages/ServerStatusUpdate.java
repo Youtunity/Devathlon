@@ -6,17 +6,17 @@ import net.youtunity.devathlon.api.net.message.Message;
 import net.youtunity.devathlon.api.net.util.ByteBufUtils;
 
 /**
- * Created by thecrealm on 23.07.16.
+ * Created by thecrealm on 24.07.16.
  */
-public class ServerStatusMessage implements Message {
+public class ServerStatusUpdate implements Message {
 
     private String server;
     private ServerStatus status;
 
-    public ServerStatusMessage() {
+    public ServerStatusUpdate() {
     }
 
-    public ServerStatusMessage(String server, ServerStatus status) {
+    public ServerStatusUpdate(String server, ServerStatus status) {
         this.server = server;
         this.status = status;
     }
@@ -41,5 +41,4 @@ public class ServerStatusMessage implements Message {
     public ServerStatus getStatus() {
         return status;
     }
-
 }

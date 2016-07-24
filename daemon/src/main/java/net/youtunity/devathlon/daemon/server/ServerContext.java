@@ -2,13 +2,9 @@ package net.youtunity.devathlon.daemon.server;
 
 import net.youtunity.devathlon.api.ServerStatus;
 import net.youtunity.devathlon.api.messages.ServerInformationMessage;
-import net.youtunity.devathlon.api.messages.ServerStatusMessage;
 import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
 import net.youtunity.devathlon.daemon.Constants;
 import net.youtunity.devathlon.daemon.Daemon;
-
-import java.io.File;
-import java.util.Properties;
 
 /**
  * Created by thecrealm on 23.07.16.
@@ -59,7 +55,7 @@ public class ServerContext {
         this.status = newStatus;
 
         for (MessageHandler handler : Daemon.getInstance().getServer().getHandlers()) {
-            handler.getChannelHandlerContext().writeAndFlush(new ServerStatusMessage(server, newStatus));
+            handler.sendMessage(new ServerStatusMessage(server, newStatus));
         }
     }
 
@@ -88,7 +84,7 @@ public class ServerContext {
         setStatus(ServerStatus.STARTING);
 
         for (MessageHandler handler : Daemon.getInstance().getServer().getHandlers()) {
-            handler.getChannelHandlerContext().writeAndFlush(new ServerInformationMessage(server, host, port, server + "' Server"));
+            handler.sendMessage(new ServerInformationMessage(server, host, port, server + "' Server"));
         }
     }
 

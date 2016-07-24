@@ -3,6 +3,7 @@ package net.youtunity.devathlon.net;
 import io.netty.channel.Channel;
 import net.youtunity.devathlon.DevathlonPlugin;
 import net.youtunity.devathlon.api.messages.ServerInformationMessage;
+import net.youtunity.devathlon.api.net.Transport;
 import net.youtunity.devathlon.api.net.message.MessageHandler;
 import net.youtunity.devathlon.server.ServerContext;
 
@@ -18,7 +19,7 @@ public class ServerInformationListener implements MessageHandler<ServerInformati
     }
 
     @Override
-    public void handle(Channel channel, ServerInformationMessage message) {
+    public void handle(Transport transport, ServerInformationMessage message) {
         ServerContext context = plugin.getServerRegistry().lookupContext(message.getServer());
 
         context.setHost(message.getHost());
