@@ -13,13 +13,9 @@ import java.util.Map;
 public class ServerRegistry {
 
     private Map<String, ServerContext> servers = new HashMap<>();
-    private List<Integer> availablePorts = new ArrayList<>();
+    private List<Integer> used = new ArrayList<>();
 
     public ServerRegistry() {
-
-        for (int i = 1; i < 4000; i++) {
-            availablePorts.add(i);
-        }
 
         List<ServerContext> execute = LoadServersTask.execute();
         System.out.println("Loaded " + execute.size() + " servers from database!");
@@ -43,9 +39,23 @@ public class ServerRegistry {
         return servers;
     }
 
+    public static final int MIN_PORT = 40000;
+    public static final int MAX_PORT = 50000;
+
+    //Ports are blocked, fix that later!
+
     public int getAvailablePort() {
-        int port = availablePorts.get(0);
-        availablePorts.remove(port);
-        return port + 41000;
+
+        for (int i = MIN_PORT; i < MAX_PORT; i++) {
+
+            if(used.contains(i)) {
+                continue;
+            }
+
+            used.add(i);
+            return i;
+        }
+
+        throw new RuntimeException("why the hell are 10000 servers running?");
     }
 }

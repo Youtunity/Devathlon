@@ -74,7 +74,7 @@ public class SecretCommand implements CommandExecutor {
                     @Override
                     public void run() {
 
-                        if(counter.get() % 25 == 0) {
+                        if(counter.get() % 20 == 0) {
                             source.getWorld().playSound(source, Sound.AMBIENT_CAVE, 1f, 1f);
                         }
 
@@ -89,14 +89,8 @@ public class SecretCommand implements CommandExecutor {
                         if(counter.incrementAndGet() > 230) {
                             cancel();
                             Entity entity = source.getWorld().spawnEntity(source, EntityType.GIANT);
-                            new ScheduleTask(plugin) {
-                                @Override
-                                public void run() {
-                                    bossBar.removeFlag(BarFlag.DARKEN_SKY);
-                                    bossBar.setVisible(false);
-                                    entity.remove();
-                                }
-                            }.run(true, 60 * 20);
+                            bossBar.removeFlag(BarFlag.DARKEN_SKY);
+                            bossBar.setVisible(false);
                         }
                     }
                 }.run(true, 0L, 1L);
