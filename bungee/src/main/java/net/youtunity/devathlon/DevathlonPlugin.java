@@ -5,8 +5,6 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.youtunity.devathlon.api.net.NettyClient;
 import net.youtunity.devathlon.api.protocol.control.ServerStartRequest;
 import net.youtunity.devathlon.api.protocol.control.ServerStopRequest;
-import net.youtunity.devathlon.api.protocol.event.RegisterListenerRequest;
-import net.youtunity.devathlon.api.protocol.event.UnregisterListenerRequest;
 import net.youtunity.devathlon.api.protocol.info.ServerInformationRequest;
 import net.youtunity.devathlon.api.protocol.info.ServerInformationResponse;
 import net.youtunity.devathlon.api.protocol.info.ServerStatusUpdate;
@@ -35,9 +33,6 @@ public class DevathlonPlugin extends Plugin {
         // Out
         this.client.getMessageRegistry().register(ServerStartRequest.class, null);
         this.client.getMessageRegistry().register(ServerStopRequest.class, null);
-        this.client.getMessageRegistry().register(RegisterListenerRequest.class, null);
-        this.client.getMessageRegistry().register(UnregisterListenerRequest.class, null);
-
 
         // In
         this.client.getMessageRegistry().register(ServerInformationResponse.class, new ServerInformationResponseHandler(this));

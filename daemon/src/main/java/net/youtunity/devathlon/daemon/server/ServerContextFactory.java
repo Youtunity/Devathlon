@@ -1,11 +1,6 @@
 package net.youtunity.devathlon.daemon.server;
 
-import net.youtunity.devathlon.daemon.Daemon;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
+import net.youtunity.devathlon.daemon.server.persistence.PersistenceContext;
 
 /**
  * Created by thecrealm on 24.07.16.
@@ -13,32 +8,12 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ServerContextFactory {
 
     public static ServerContext create(String server) {
+        ServerContext context = PersistenceContext.findContext(server);
 
-        final AtomicReference<String> motd = new AtomicReference<>(server + "'s Server =)");
-        final AtomicBoolean exists = new AtomicBoolean(false);
-
-        Daemon.getInstance().getSql().execute(statement -> {
-            try (ResultSet res = statement.executeQuery("SELECT * FROM servers WHERE `name` = '" + server + "'")) {
-                if (res.next()) {
-                    motd.set(res.getString("motd"));
-                    exists.set(true);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-
-        ServerContext context = new ServerContext(server);
-        if (exists.get()) {
-            context.setMotd(motd.get());
-        } else {
-            Daemon.getInstance().getSql().execute(statement -> {
-                try {
-                    statement.executeUpdate("INSERT INTO servers (`name`, `motd`) VALUES ('" + server + "', '" + motd.get() + "')");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
+        if (context == null) {
+            context = new ServerContext(server);
+            context.setMotd(server + "'s Hackfleisch besteht zu 90% aus Cola");
+            PersistenceContext.insertContext(context);
         }
 
         return context;

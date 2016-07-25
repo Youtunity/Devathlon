@@ -2,11 +2,11 @@ package net.youtunity.devathlon.api.net;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.timeout.IdleStateHandler;
 import net.youtunity.devathlon.api.net.message.MessageRegistry;
 import net.youtunity.devathlon.api.net.pipeline.*;
 
@@ -49,14 +49,12 @@ public class NettyServer implements NetworkBase {
         return new ServerBootstrap()
                 .group(new NioEventLoopGroup(), new NioEventLoopGroup())
                 .channel(NioServerSocketChannel.class)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
 
                     @Override
                     public void initChannel(SocketChannel channel) throws Exception {
                         ChannelPipeline pipe = channel.pipeline();
-
-                        pipe.addLast(new IdleStateHandler(60, 0, 0));
-                        pipe.addLast(new IdleHandler());
 
                         pipe.addLast(new LenghtDecoder());
                         pipe.addLast(new MessageDecoder(NettyServer.this));

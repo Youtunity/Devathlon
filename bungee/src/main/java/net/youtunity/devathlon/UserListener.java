@@ -46,10 +46,7 @@ public class UserListener implements Listener {
     public void onHandshake(ProxyPingEvent event) {
 
         String host = event.getConnection().getVirtualHost().getHostString();
-
         ServerContext context = plugin.getServerRegistry().lookupContext(host);
-        System.out.println(context.getMotd());
-
         event.getResponse().setDescriptionComponent(new TextComponent(context.getMotd()));
     }
 

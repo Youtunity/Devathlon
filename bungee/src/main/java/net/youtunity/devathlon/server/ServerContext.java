@@ -18,8 +18,6 @@ public class ServerContext {
     private ServerStatus serverStatus = ServerStatus.OFFLINE;
 
     public ServerContext(String server) {
-
-        System.out.println("CTX " + server);
         this.server = server;
         this.host = "default";
         this.port = 1;

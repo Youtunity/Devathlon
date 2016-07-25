@@ -2,6 +2,7 @@ package net.youtunity.devathlon.daemon.server;
 
 import net.youtunity.devathlon.api.ServerStatus;
 import net.youtunity.devathlon.daemon.Constants;
+import net.youtunity.devathlon.daemon.Daemon;
 import net.youtunity.devathlon.daemon.util.StreamGobbler;
 
 import java.io.IOException;
@@ -20,8 +21,6 @@ public class ServerProcess {
 
     public void start() {
 
-        System.out.println("PROCESS START!!!!");
-
         try {
             this.process = build().start();
 
@@ -31,6 +30,8 @@ public class ServerProcess {
 
                     @Override
                     protected void onLine(String line) {
+
+                        System.out.println(line);
 
                         if (line.contains("INFO]: Done")) {
                             //Server started, yay
@@ -49,7 +50,10 @@ public class ServerProcess {
     }
 
     public void stop() {
-        this.process.destroy();
+
+        if (isRunning()) {
+            this.process.destroy();
+        }
     }
 
     public boolean isRunning() {
@@ -63,18 +67,12 @@ public class ServerProcess {
     }
 
     private String[] buildArguments() {
-
         String command = "";
         command += "java -Dcom.mojang.eula.agree=true -jar " + Constants.SPIGOT_JAR_NAME + " ";
-
         command += "-h 0.0.0.0 ";
-
-        int port = 8974;
+        int port = Daemon.getInstance().getServerRegistry().getAvailablePort();
         context.setPort(port);
         command += "-p " + port;
-
-        System.out.println(command);
-
         return command.split(" ");
     }
 }

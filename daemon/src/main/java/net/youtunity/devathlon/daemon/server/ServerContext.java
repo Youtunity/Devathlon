@@ -76,6 +76,10 @@ public class ServerContext {
         return directory;
     }
 
+    public ServerProcess getProcess() {
+        return process;
+    }
+
     public void setRunning(boolean running) {
 
         if (getStatus() == ServerStatus.RUNNING && !running) {
@@ -96,7 +100,7 @@ public class ServerContext {
         this.process.start();
 
         setStatus(ServerStatus.STARTING);
-        Daemon.getInstance().broadcastMessage(new ServerInformationResponse(server, host, port, server + "' Server", ServerStatus.STARTING));
+        Daemon.getInstance().broadcastMessage(new ServerInformationResponse(server, host, port, motd, ServerStatus.STARTING));
     }
 
     private void stopServer() {
