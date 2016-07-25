@@ -6,7 +6,6 @@ import net.youtunity.devathlon.api.protocol.interaction.AvailableTemplatesReques
 import net.youtunity.devathlon.api.protocol.interaction.AvailableTemplatesResponse;
 import net.youtunity.devathlon.daemon.Constants;
 
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 

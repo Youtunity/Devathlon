@@ -5,14 +5,11 @@ import com.quartercode.quarterbukkit.api.select.LineInventoryLayouter;
 import com.quartercode.quarterbukkit.api.select.SelectInventory;
 import com.quartercode.quarterbukkit.api.select.Selection;
 import net.youtunity.devathlon.api.protocol.interaction.ChangeTemplateRequest;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 
 /**
  * Created by thecrealm on 25.07.16.
@@ -28,7 +25,7 @@ public class MenuCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
 
-        if(commandSender instanceof Player) {
+        if (commandSender instanceof Player) {
             Player player = ((Player) commandSender);
 
             SelectInventory selectInventory = new SelectInventory(plugin, "Server Menu", new LineInventoryLayouter()) {

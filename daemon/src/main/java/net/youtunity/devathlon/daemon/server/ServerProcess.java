@@ -35,8 +35,6 @@ public class ServerProcess {
                     @Override
                     protected void onLine(String line) {
 
-                        System.out.println(line);
-
                         if (line.contains("INFO]: Done")) {
                             //Server started, yay
                             context.setStatus(ServerStatus.RUNNING);
@@ -57,9 +55,8 @@ public class ServerProcess {
 
         if (isRunning()) {
 
-            System.out.println("Try to stop server..");
             context.setStatus(ServerStatus.STOPPING);
-            try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))) {
                 writer.write("stop");
                 writer.flush();
             } catch (IOException e) {

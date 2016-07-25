@@ -3,6 +3,7 @@ package net.youtunity.devathlon.daemon.net.info;
 import net.youtunity.devathlon.api.net.Transport;
 import net.youtunity.devathlon.api.net.message.MessageHandler;
 import net.youtunity.devathlon.api.protocol.info.ServerOnlinePlayersUpdate;
+import net.youtunity.devathlon.daemon.Daemon;
 
 /**
  * Created by thecrealm on 25.07.16.
@@ -11,6 +12,6 @@ public class ServerOnlinePlayersUpdateHandler implements MessageHandler<ServerOn
 
     @Override
     public void handle(Transport transport, ServerOnlinePlayersUpdate message) {
-
+        Daemon.getInstance().getServerRegistry().lookupContext(message.getServer()).setOnlinePlayers(message.getCount());
     }
 }

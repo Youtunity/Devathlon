@@ -26,8 +26,6 @@ public class MessageEncoder extends MessageToMessageEncoder<Message> {
         ByteBuf byteBuf = Unpooled.buffer();
 
         int id = base.getMessageRegistry().lookupId(message.getClass());
-        System.out.println("OUT: " + message.getClass().getName());
-
         byteBuf.writeInt(id);
         message.encode(byteBuf);
         out.add(byteBuf);

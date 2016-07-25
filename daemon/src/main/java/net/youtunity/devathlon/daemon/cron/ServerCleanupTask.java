@@ -25,9 +25,9 @@ public class ServerCleanupTask extends Thread {
             //check list
             for (String server : round) {
                 ServerContext context = Daemon.getInstance().getServerRegistry().lookupContext(server);
-                if(context.getOnlinePlayers() == 0) {
+                if (context.getOnlinePlayers() == 0) {
                     ServerProcess process = context.getProcess();
-                    if(process != null) {
+                    if (process != null) {
                         process.stop();
                         System.out.println("Stopped server '" + context.getServer() + "'");
                     }
@@ -42,7 +42,7 @@ public class ServerCleanupTask extends Thread {
                     .collect(Collectors.toList());
 
             for (Map.Entry<String, ServerContext> entry : running) {
-                if(entry.getValue().getOnlinePlayers() == 0) {
+                if (entry.getValue().getOnlinePlayers() == 0) {
                     round.add(entry.getKey());
                     System.out.println("Added '" + entry.getKey() + "' to cleanup queue");
                 }

@@ -17,7 +17,7 @@ public class ServerRegistry {
 
     public ServerRegistry() {
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 1; i < 4000; i++) {
             availablePorts.add(i);
         }
 
@@ -46,10 +46,6 @@ public class ServerRegistry {
     public int getAvailablePort() {
         int port = availablePorts.get(0);
         availablePorts.remove(port);
-        return port + 40000;
-    }
-
-    public void freePort(int port) {
-        availablePorts.add(port - 40000);
+        return port + 41000;
     }
 }

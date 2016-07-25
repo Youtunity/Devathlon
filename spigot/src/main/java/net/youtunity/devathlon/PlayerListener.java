@@ -27,7 +27,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        int players = Bukkit.getOnlinePlayers().size() -1;
+        int players = Bukkit.getOnlinePlayers().size() - 1;
         plugin.getClient().sendMessage(new ServerOnlinePlayersUpdate(plugin.getServerName(), players));
     }
 }

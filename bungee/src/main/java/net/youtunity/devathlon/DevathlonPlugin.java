@@ -24,13 +24,12 @@ public class DevathlonPlugin extends Plugin {
     private NettyClient client;
     private ServerRegistry serverRegistry;
 
-
     @Override
     public void onEnable() {
 
         this.serverRegistry = new ServerRegistry();
 
-        this.client = new NettyClient("127.0.0.1", 4040, true);
+        this.client = new NettyClient("127.0.0.1", DEFAULT_DAEMON_SERVER, true);
 
         //control
         this.client.getMessageRegistry().register(ServerStartRequest.class, null);
@@ -44,7 +43,7 @@ public class DevathlonPlugin extends Plugin {
         this.client.getMessageRegistry().register(ServerStatusUpdate.class, new ServerStatusUpdateHandler(this));
 
         this.client.connect();
-        this.client.sendMessage(new ServerInformationRequest(null));
+        this.client.sendMessage(new ServerInformationRequest(null)); //bulk
 
         ProxyServer.getInstance().getPluginManager().registerListener(this, new UserListener(this));
 

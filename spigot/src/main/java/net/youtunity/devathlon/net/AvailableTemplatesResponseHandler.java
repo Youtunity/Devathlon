@@ -2,7 +2,6 @@ package net.youtunity.devathlon.net;
 
 import net.youtunity.devathlon.DevathlonPlugin;
 import net.youtunity.devathlon.api.net.Transport;
-import net.youtunity.devathlon.api.net.message.Message;
 import net.youtunity.devathlon.api.net.message.MessageHandler;
 import net.youtunity.devathlon.api.protocol.interaction.AvailableTemplatesResponse;
 

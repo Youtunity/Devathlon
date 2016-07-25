@@ -3,7 +3,6 @@ package net.youtunity.devathlon.daemon.server;
 import net.youtunity.devathlon.api.ServerStatus;
 import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
 import net.youtunity.devathlon.api.protocol.info.ServerInformationResponse;
-import net.youtunity.devathlon.api.protocol.info.ServerOnlinePlayersUpdate;
 import net.youtunity.devathlon.api.protocol.info.ServerStatusUpdate;
 import net.youtunity.devathlon.daemon.Constants;
 import net.youtunity.devathlon.daemon.Daemon;
@@ -69,7 +68,6 @@ public class ServerContext {
     public void setMotd(String newMotd) {
 
         if (!this.motd.isEmpty()) {
-            System.out.println("UPDATE MOTD " + getServer() + ": " + motd);
             PersistenceContext.updateMotd(server, newMotd);
             Daemon.getInstance().broadcastMessage(new ServerInformationResponse(getServer(), getHost(), getPort(), newMotd, getStatus()));
         }
@@ -77,15 +75,15 @@ public class ServerContext {
         this.motd = newMotd;
     }
 
+    public int getOnlinePlayers() {
+        return onlinePlayers;
+    }
+
     public void setOnlinePlayers(int onlinePlayers) {
         this.onlinePlayers = onlinePlayers;
 
         // Notify the servers
         //Daemon.getInstance().broadcastMessage(new ServerOnlinePlayersUpdate(getServer(), onlinePlayers));
-    }
-
-    public int getOnlinePlayers() {
-        return onlinePlayers;
     }
 
     public ServerDirectory getDirectory() {

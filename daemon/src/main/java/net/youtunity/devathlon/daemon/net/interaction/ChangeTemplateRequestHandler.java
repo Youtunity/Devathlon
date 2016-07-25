@@ -2,7 +2,6 @@ package net.youtunity.devathlon.daemon.net.interaction;
 
 import net.youtunity.devathlon.api.ServerStatus;
 import net.youtunity.devathlon.api.net.Transport;
-import net.youtunity.devathlon.api.net.message.Message;
 import net.youtunity.devathlon.api.net.message.MessageHandler;
 import net.youtunity.devathlon.api.protocol.interaction.ChangeTemplateRequest;
 import net.youtunity.devathlon.daemon.Daemon;
@@ -18,7 +17,7 @@ public class ChangeTemplateRequestHandler implements MessageHandler<ChangeTempla
 
         ServerContext context = Daemon.getInstance().getServerRegistry().lookupContext(message.getServer());
 
-        if(context.getStatus() == ServerStatus.RUNNING) {
+        if (context.getStatus() == ServerStatus.RUNNING) {
             context.getProcess().stop();
         }
 

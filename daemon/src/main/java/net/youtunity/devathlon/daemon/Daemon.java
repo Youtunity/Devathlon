@@ -16,6 +16,7 @@ import net.youtunity.devathlon.api.protocol.interaction.UpdateMOTDRequest;
 import net.youtunity.devathlon.daemon.command.CommandManager;
 import net.youtunity.devathlon.daemon.command.commands.SQLCommand;
 import net.youtunity.devathlon.daemon.command.commands.StopCommand;
+import net.youtunity.devathlon.daemon.command.commands.UsageCommand;
 import net.youtunity.devathlon.daemon.cron.ServerCleanupTask;
 import net.youtunity.devathlon.daemon.net.control.ServerStartRequestHandler;
 import net.youtunity.devathlon.daemon.net.control.ServerStopRequestHandler;
@@ -37,6 +38,7 @@ public class Daemon {
     private ServerRegistry serverRegistry;
     private SQLiteConnection sql;
     private CommandManager commandManager;
+
     private Daemon() {
         // private
     }
@@ -90,6 +92,7 @@ public class Daemon {
         this.commandManager = new CommandManager();
         this.commandManager.registerCommand("stop", new StopCommand());
         this.commandManager.registerCommand("sql", new SQLCommand());
+        this.commandManager.registerCommand("usage", new UsageCommand());
         this.commandManager.startConsoleReader();
     }
 

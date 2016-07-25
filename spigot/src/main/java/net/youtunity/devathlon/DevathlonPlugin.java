@@ -55,6 +55,7 @@ public class DevathlonPlugin extends JavaPlugin {
 
         getCommand("menu").setExecutor(new MenuCommand(this));
         getCommand("motd").setExecutor(new MotdCommand(this));
+        getCommand("secret").setExecutor(new SecretCommand(this));
 
         new PlayerListener(this);
     }

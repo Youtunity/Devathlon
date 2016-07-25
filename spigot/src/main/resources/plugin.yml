@@ -4,3 +4,4 @@ main: net.youtunity.devathlon.DevathlonPlugin
 commands:
   menu:
   motd:
+  secret:

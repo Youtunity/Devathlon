@@ -3,8 +3,8 @@ package net.youtunity.devathlon.daemon.server;
 import net.youtunity.devathlon.daemon.Constants;
 import org.apache.commons.io.FileUtils;
 
-import java.io.*;
-import java.util.Properties;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by thecrealm on 24.07.16.
