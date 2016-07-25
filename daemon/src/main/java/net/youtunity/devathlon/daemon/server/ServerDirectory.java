@@ -47,27 +47,6 @@ public class ServerDirectory {
         return true;
     }
 
-    public Properties loadData() {
-
-        try (FileReader reader = new FileReader(new File(asFile(), Constants.DATA_FILE_NAME))) {
-            Properties data = new Properties();
-            data.load(reader);
-            return data;
-        } catch (IOException e) {
-            // not exists?
-            return new Properties();
-        }
-    }
-
-    public void saveData(Properties data) {
-
-        try (OutputStream out = new FileOutputStream(new File(asFile(), Constants.DATA_FILE_NAME))) {
-            data.store(out, "Data File");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void copyTemplate(String template) {
 
         this.clear();

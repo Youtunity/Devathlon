@@ -8,6 +8,8 @@ import net.youtunity.devathlon.api.protocol.control.ServerStopRequest;
 import net.youtunity.devathlon.api.protocol.info.ServerInformationRequest;
 import net.youtunity.devathlon.api.protocol.info.ServerInformationResponse;
 import net.youtunity.devathlon.api.protocol.info.ServerStatusUpdate;
+import net.youtunity.devathlon.api.protocol.interaction.ChangeTemplateRequest;
+import net.youtunity.devathlon.api.protocol.interaction.UpdateMOTDRequest;
 import net.youtunity.devathlon.net.ServerInformationResponseHandler;
 import net.youtunity.devathlon.net.ServerStatusUpdateHandler;
 import net.youtunity.devathlon.server.ServerRegistry;
@@ -30,11 +32,14 @@ public class DevathlonPlugin extends Plugin {
 
         this.client = new NettyClient("127.0.0.1", 4040, true);
 
-        // Out
+        //control
         this.client.getMessageRegistry().register(ServerStartRequest.class, null);
         this.client.getMessageRegistry().register(ServerStopRequest.class, null);
 
-        // In
+        //info
+        this.client.getMessageRegistry().register(ChangeTemplateRequest.class, null);
+        this.client.getMessageRegistry().register(ServerInformationRequest.class, null);
+        this.client.getMessageRegistry().register(UpdateMOTDRequest.class, null);
         this.client.getMessageRegistry().register(ServerInformationResponse.class, new ServerInformationResponseHandler(this));
         this.client.getMessageRegistry().register(ServerStatusUpdate.class, new ServerStatusUpdateHandler(this));
 

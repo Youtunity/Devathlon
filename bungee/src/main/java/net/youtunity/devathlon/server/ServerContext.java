@@ -2,6 +2,7 @@ package net.youtunity.devathlon.server;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
+import net.youtunity.devathlon.Servers;
 import net.youtunity.devathlon.api.ServerStatus;
 
 import java.net.InetSocketAddress;
@@ -56,17 +57,21 @@ public class ServerContext {
         return serverStatus;
     }
 
-    public ServerInfo getServerInfo() {
-        return ProxyServer.getInstance().constructServerInfo(server, new InetSocketAddress(host, port), motd, false);
-    }
-
     public void doStatusChange(ServerStatus newStatus) {
-
         if (newStatus == serverStatus) {
             return;
         }
 
         this.serverStatus = newStatus;
+
+        if(newStatus == ServerStatus.RUNNING) {
+            Servers.addServer(getServer(), getHost(), getPort());
+        }
+
+        if(newStatus == ServerStatus.STOPPING) {
+            Servers.removeServer(getServer());
+        }
+
         ProxyServer.getInstance().getPluginManager().callEvent(new ServerStatusChangedEvent(newStatus, this));
     }
 }

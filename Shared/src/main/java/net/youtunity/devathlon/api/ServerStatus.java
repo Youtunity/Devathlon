@@ -8,5 +8,6 @@ public enum ServerStatus {
     STARTING,
     RUNNING,
     STOPPING,
+    IDLE,
     ERROR;
 }

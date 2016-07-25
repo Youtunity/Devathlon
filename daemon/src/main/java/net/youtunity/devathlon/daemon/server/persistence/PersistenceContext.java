@@ -48,8 +48,8 @@ public class PersistenceContext {
 
         Connection connection = Daemon.getInstance().getSql().getConnection();
         try (PreparedStatement statement = connection.prepareStatement("UPDATE servers SET motd = ? WHERE name = ?")) {
-            statement.setString(1, server);
-            statement.setString(2, motd);
+            statement.setString(1, motd);
+            statement.setString(2, server);
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();

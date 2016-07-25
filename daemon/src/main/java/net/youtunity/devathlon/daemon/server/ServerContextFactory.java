@@ -12,7 +12,7 @@ public class ServerContextFactory {
 
         if (context == null) {
             context = new ServerContext(server);
-            context.setMotd(server + "'s Hackfleisch besteht zu 90% aus Cola");
+            context.setMotd("Create your server simply by join this server!");
             PersistenceContext.insertContext(context);
         }
 

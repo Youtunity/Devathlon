@@ -24,6 +24,7 @@ public class ServerInformationResponseHandler implements MessageHandler<ServerIn
         context.setHost(message.getHost());
         context.setPort(message.getPort());
         context.setMotd(message.getMotd());
+        System.out.println("MOTD: " + message.getMotd());
         context.doStatusChange(message.getStatus());
     }
 }

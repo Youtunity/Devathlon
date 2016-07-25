@@ -23,6 +23,17 @@
             <version>1.10.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.quartercode</groupId>
+            <artifactId>quarterbukkit-plugin</artifactId>
+            <version>0.4.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.quartercode</groupId>
+            <artifactId>quarterbukkit-integration</artifactId>
+            <version>0.4.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

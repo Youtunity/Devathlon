@@ -7,35 +7,36 @@ import net.youtunity.devathlon.api.net.util.ByteBufUtils;
 /**
  * Created by thecrealm on 25.07.16.
  */
-public class UpdateMOTDRequest implements Message {
+public class ServerOnlinePlayersUpdate implements Message {
 
     private String server;
-    private String motd;
+    private int count;
 
-    public UpdateMOTDRequest() {
+    public ServerOnlinePlayersUpdate() {
     }
 
-    public UpdateMOTDRequest(String server) {
+    public ServerOnlinePlayersUpdate(String server, int count) {
         this.server = server;
+        this.count = count;
     }
 
     @Override
     public void encode(ByteBuf writer) {
         ByteBufUtils.writeString(server, writer);
-        ByteBufUtils.writeString(motd, writer);
+        writer.writeInt(count);
     }
 
     @Override
     public void decode(ByteBuf reader) {
         this.server = ByteBufUtils.readString(reader);
-        this.motd = ByteBufUtils.readString(reader);
+        this.count = reader.readInt();
     }
 
     public String getServer() {
         return server;
     }
 
-    public String getMotd() {
-        return motd;
+    public int getCount() {
+        return count;
     }
 }

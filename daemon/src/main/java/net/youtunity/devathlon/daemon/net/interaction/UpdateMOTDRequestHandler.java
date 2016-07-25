@@ -1,8 +1,8 @@
-package net.youtunity.devathlon.daemon.net.info;
+package net.youtunity.devathlon.daemon.net.interaction;
 
 import net.youtunity.devathlon.api.net.Transport;
 import net.youtunity.devathlon.api.net.message.MessageHandler;
-import net.youtunity.devathlon.api.protocol.info.UpdateMOTDRequest;
+import net.youtunity.devathlon.api.protocol.interaction.UpdateMOTDRequest;
 import net.youtunity.devathlon.daemon.Daemon;
 
 /**

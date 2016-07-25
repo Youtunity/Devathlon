@@ -3,6 +3,7 @@ package net.youtunity.devathlon.daemon.server;
 import net.youtunity.devathlon.api.ServerStatus;
 import net.youtunity.devathlon.api.net.pipeline.MessageHandler;
 import net.youtunity.devathlon.api.protocol.info.ServerInformationResponse;
+import net.youtunity.devathlon.api.protocol.info.ServerOnlinePlayersUpdate;
 import net.youtunity.devathlon.api.protocol.info.ServerStatusUpdate;
 import net.youtunity.devathlon.daemon.Constants;
 import net.youtunity.devathlon.daemon.Daemon;
@@ -19,8 +20,10 @@ public class ServerContext {
     private ServerDirectory directory;
 
     private String host = "0.0.0.0";
-    private String motd;
+    private String motd = "";
     private int port = -1;
+
+    private int onlinePlayers = 0;
 
     public ServerContext(String server) {
         this.server = server;
@@ -63,13 +66,26 @@ public class ServerContext {
         return this.motd;
     }
 
-    public void setMotd(String motd) {
-        if (this.motd != null) {
-            PersistenceContext.updateMotd(server, motd);
-            Daemon.getInstance().broadcastMessage(new ServerInformationResponse(getServer(), getHost(), getPort(), getMotd(), getStatus()));
+    public void setMotd(String newMotd) {
+
+        if (!this.motd.isEmpty()) {
+            System.out.println("UPDATE MOTD " + getServer() + ": " + motd);
+            PersistenceContext.updateMotd(server, newMotd);
+            Daemon.getInstance().broadcastMessage(new ServerInformationResponse(getServer(), getHost(), getPort(), newMotd, getStatus()));
         }
 
-        this.motd = motd;
+        this.motd = newMotd;
+    }
+
+    public void setOnlinePlayers(int onlinePlayers) {
+        this.onlinePlayers = onlinePlayers;
+
+        // Notify the servers
+        //Daemon.getInstance().broadcastMessage(new ServerOnlinePlayersUpdate(getServer(), onlinePlayers));
+    }
+
+    public int getOnlinePlayers() {
+        return onlinePlayers;
     }
 
     public ServerDirectory getDirectory() {
@@ -84,7 +100,7 @@ public class ServerContext {
 
         if (getStatus() == ServerStatus.RUNNING && !running) {
             stopServer();
-        } else if (getStatus() == ServerStatus.OFFLINE && running) {
+        } else if (getStatus() == ServerStatus.OFFLINE || getStatus() == ServerStatus.IDLE && running) {
             starServer();
         }
     }
@@ -98,13 +114,10 @@ public class ServerContext {
 
         this.process = new ServerProcess(this);
         this.process.start();
-
-        setStatus(ServerStatus.STARTING);
         Daemon.getInstance().broadcastMessage(new ServerInformationResponse(server, host, port, motd, ServerStatus.STARTING));
     }
 
     private void stopServer() {
-        setStatus(ServerStatus.STOPPING);
         this.process.stop();
     }
 }

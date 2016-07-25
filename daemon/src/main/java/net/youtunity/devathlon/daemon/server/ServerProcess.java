@@ -5,7 +5,9 @@ import net.youtunity.devathlon.daemon.Constants;
 import net.youtunity.devathlon.daemon.Daemon;
 import net.youtunity.devathlon.daemon.util.StreamGobbler;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 /**
  * Created by thecrealm on 23.07.16.
@@ -20,6 +22,8 @@ public class ServerProcess {
     }
 
     public void start() {
+
+        context.setStatus(ServerStatus.STARTING);
 
         try {
             this.process = build().start();
@@ -52,7 +56,23 @@ public class ServerProcess {
     public void stop() {
 
         if (isRunning()) {
-            this.process.destroy();
+
+            System.out.println("Try to stop server..");
+            context.setStatus(ServerStatus.STOPPING);
+            try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))) {
+                writer.write("stop");
+                writer.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                //block thread
+                this.process.waitFor();
+                context.setStatus(ServerStatus.OFFLINE);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -68,7 +88,9 @@ public class ServerProcess {
 
     private String[] buildArguments() {
         String command = "";
-        command += "java -Dcom.mojang.eula.agree=true -jar " + Constants.SPIGOT_JAR_NAME + " ";
+        command += "java -Dcom.mojang.eula.agree=true ";
+        command += "-Dserver=" + context.getServer() + " ";
+        command += "-jar " + Constants.SPIGOT_JAR_NAME + " ";
         command += "-h 0.0.0.0 ";
         int port = Daemon.getInstance().getServerRegistry().getAvailablePort();
         context.setPort(port);
