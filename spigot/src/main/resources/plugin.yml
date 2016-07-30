@@ -1,7 +1,0 @@
-name: Devathlon
-version: 1.0
-main: net.youtunity.devathlon.DevathlonPlugin
-commands:
-  menu:
-  motd:
-  secret:
