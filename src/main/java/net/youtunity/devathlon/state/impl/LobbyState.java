@@ -7,6 +7,7 @@ import net.youtunity.devathlon.team.Team;
 import net.youtunity.devathlon.user.User;
 import net.youtunity.devathlon.util.ShapeListener;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -58,7 +59,8 @@ public class LobbyState extends CountedState {
             Bukkit.broadcastMessage(DevathlonPlugin.PREFIX + "Das Spiel beginnt in " + count + " Sekunden");
 
             if(count <= 5) {
-
+                plugin.getUserManager().getUsers().forEach(
+                        user -> user.getPlayer().playSound(user.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_TOUCH, 1f, 1f));
             }
         }
     }

@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */
 public class DevathlonPlugin extends JavaPlugin {
 
-    public static String PREFIX = "[BayHunters] ";
+    public static String PREFIX = "§7[§cBayHunters§7]§3 ";
 
     private File configFile;
     private DevathlonConfig config;
@@ -66,6 +66,9 @@ public class DevathlonPlugin extends JavaPlugin {
         setup.addCommandHandler(new TeamCommand(this));
         setup.addCommandHandler(new LootCommand(this));
         setup.addCommandHandler(new ConfigCommand(this));
+
+        //Utils
+        new BoatListener(this);
 
         this.stateManager.prepareAndStart();
     }
@@ -118,9 +121,5 @@ public class DevathlonPlugin extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static org.bukkit.Location location() {
-        return new org.bukkit.Location(Bukkit.getWorlds().get(0), 0, 0, 0);
     }
 }

@@ -64,7 +64,7 @@ public class BayCommand implements CommandHandler {
                              cancel();
                         }
 
-                        plugin.getBayManager().findBay(bay).getTower().update();
+                        plugin.getBayManager().findBay(bay).getTower().visualizeHolder();
                     }
                 }.run(true, 0, 50);
         }

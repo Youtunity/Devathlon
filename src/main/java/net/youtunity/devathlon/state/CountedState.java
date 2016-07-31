@@ -13,6 +13,7 @@ public abstract class CountedState extends State {
 
     protected DevathlonPlugin plugin;
     private final int end;
+    private int initialCount;
     private AtomicInteger counter;
     private final Direction direction;
 
@@ -20,6 +21,7 @@ public abstract class CountedState extends State {
 
     public CountedState(DevathlonPlugin plugin, int initialCount, int endCount, Direction direction) {
         this.plugin = plugin;
+        this.initialCount = initialCount;
         this.counter = new AtomicInteger(initialCount);
         this.end = endCount;
         this.direction = direction;
@@ -67,6 +69,10 @@ public abstract class CountedState extends State {
 
     public int getCurrentCount() {
         return counter.get();
+    }
+
+    public int getInitialCount() {
+        return initialCount;
     }
 
     public int getEndCount() {

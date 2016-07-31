@@ -1,7 +1,9 @@
 package net.youtunity.devathlon.team;
 
 import net.youtunity.devathlon.DevathlonConfig;
+import net.youtunity.devathlon.DevathlonPlugin;
 import net.youtunity.devathlon.user.User;
+import org.bukkit.DyeColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,8 @@ public class Team {
     private String name;
     private DevathlonConfig.Team config;
     private List<User> users = new ArrayList<>();
+
+    private int tickets = 150;
 
     public Team(String name, DevathlonConfig.Team config) {
         this.name = name;
@@ -33,12 +37,34 @@ public class Team {
 
         this.users.add(user);
         user.setTeam(this);
-        user.getPlayer().sendMessage("Du bist Team " + getName() + " beigetreten!");
+        user.getPlayer().sendMessage(DevathlonPlugin.PREFIX + "Du bist Team " + getName() + " beigetreten!");
     }
 
     public void removeUser(User user) {
         users.remove(user);
         user.setTeam(null);
+    }
+
+    public void setTickets(int tickets) {
+        this.tickets = tickets;
+    }
+
+    // NO TIME, HARDCODE THIS SHIT
+    public DyeColor getDyeColor() {
+
+        if(getName().equals("red")) {
+            return DyeColor.RED;
+        } else {
+            return DyeColor.BLUE;
+        }
+    }
+
+    public void decrementTickets() {
+        this.tickets--;
+    }
+
+    public int getTickets() {
+        return tickets;
     }
 
     public DevathlonConfig.Team getConfig() {
