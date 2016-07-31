@@ -19,7 +19,7 @@ public class LootSource implements Source {
     @Override
     public void update(Plugin plugin, ActiveObjectSystem objectSystem, Random random) {
 
-        if(objectSystem.getLifetime() > MathUtil.getTicks(6 * 1000)) return;
+        if(objectSystem.getLifetime() > MathUtil.getTicks(5 * 1000)) return;
         double distanceFromCenter = (objectSystem.getLifetime()) / 20;
 
         for (int counter = 0; counter < distanceFromCenter * 2; counter++) {

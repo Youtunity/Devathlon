@@ -14,8 +14,14 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -48,6 +54,12 @@ public class IngameState extends CountedState implements Listener {
         world.setThundering(false);
         world.setStorm(false);
 
+        for (Entity e : world.getEntities()) {
+            if(e instanceof Boat || e instanceof Item) {
+                e.remove();
+            }
+        }
+
         //Info
         this.infoBar = Bukkit.createBossBar("INFO", BarColor.BLUE, BarStyle.SEGMENTED_20);
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -69,7 +81,7 @@ public class IngameState extends CountedState implements Listener {
             user.getPlayer().setGameMode(GameMode.SURVIVAL);
             user.getPlayer().setHealth(20D);
             user.getPlayer().setFoodLevel(20);
-            user.getPlayer().setAllowFlight(true);
+
             infoBar.addPlayer(user.getPlayer());
             user.getPlayer().setScoreboard(scoreboard);
         });
@@ -102,7 +114,11 @@ public class IngameState extends CountedState implements Listener {
                             for (Team found : plugin.getTeamManager().getTeams()) {
                                 if(!team.equals(found)) {
                                     Bukkit.broadcastMessage(DevathlonPlugin.PREFIX + "Team " + found.getName() + " hat das Spiel gewonnen!");
-                                    this.cancel();
+
+                                    if(this.isRunning()) {
+                                        cancel();
+                                    }
+
                                     plugin.getStateManager().doNextState();
                                 }
                             }
@@ -124,9 +140,14 @@ public class IngameState extends CountedState implements Listener {
             logicTask.cancel();
         }
 
+        infoBar.setVisible(false);
+
         for (User user : plugin.getUserManager().getUsers()) {
             user.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-            infoBar.setVisible(false);
+        }
+
+        for (Bay bay : plugin.getBayManager().getBays()) {
+            bay.getBlocks().setColor(DyeColor.GRAY);
         }
     }
 
@@ -140,18 +161,26 @@ public class IngameState extends CountedState implements Listener {
     }
 
     @EventHandler
-    public void onMove(PlayerMoveEvent event) {
-        if(event.getPlayer().isInsideVehicle()) return;
-
-        Location to = event.getTo();
-        if (to.getBlock().getType() == Material.WATER) {
-            Block down = to.clone().getBlock().getRelative(BlockFace.DOWN);
-            Block up = to.clone().getBlock().getRelative(BlockFace.UP);
-
-            if(down.getType() == Material.WATER || down.getType() == Material.STATIONARY_WATER ||
-                    up.getType() == Material.WATER || up.getType() == Material.STATIONARY_WATER) {
-                event.getPlayer().setHealth(0D);
-            }
-        }
+    public void onBreak(BlockBreakEvent event) {
+        event.setCancelled(true);
     }
+
+    @EventHandler
+    public void onJoin(PlayerLoginEvent e) {
+        e.disallow(PlayerLoginEvent.Result.KICK_FULL, "Game already started!");
+    }
+
+//    @EventHandler
+//    public void onMove(PlayerMoveEvent e) {
+//        Location newLoc = e.getTo();
+//
+//        // If the player's head is inside water, the water's clearly at least two blocks deep
+//        if (newLoc.clone().add(0, 1, 0).getBlock().isLiquid()) {
+//            e.getPlayer().remove();
+//        }
+//        // If the blocks at and below the player's feet are water, then he must be in two-deep water as well
+//        else if (newLoc.getBlock().isLiquid() && newLoc.clone().subtract(0, 1, 0).getBlock().isLiquid()) {
+//            e.getPlayer().remove();
+//        }
+//    }
 }

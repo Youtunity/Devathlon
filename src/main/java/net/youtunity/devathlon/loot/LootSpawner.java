@@ -35,7 +35,7 @@ public class LootSpawner {
         this.scheduleTask = new ScheduleTask(plugin) {
             @Override
             public void run() {
-                if(random .nextInt(15) == 0) {
+                if(random .nextInt(18) == 0) {
                     spawnRandom();
                 }
             }
@@ -85,14 +85,14 @@ public class LootSpawner {
             },
             {
                     new ItemStack(Material.BEETROOT, 14),
-                    new ItemStack(Material.IRON_LEGGINGS, 2),
+                    new ItemStack(Material.IRON_LEGGINGS),
                     new ItemStack(Material.WOOD_SWORD),
                     new ItemStack(Material.IRON_HOE),
                     new ItemStack(Material.CHAINMAIL_CHESTPLATE),
                     new ItemStack(Material.APPLE, 8),
             },
             {
-                    new ItemStack(Material.GOLD_HELMET, 2),
+                    new ItemStack(Material.GOLD_HELMET),
                     new ItemStack(Material.LEATHER_BOOTS),
                     new ItemStack(Material.CHAINMAIL_CHESTPLATE),
                     new ItemStack(Material.IRON_SWORD),
@@ -105,21 +105,20 @@ public class LootSpawner {
                     new ItemStack(Material.RABBIT_STEW, 7),
             },
             {
-                    new ItemStack(Material.GOLD_LEGGINGS, 17),
+                    new ItemStack(Material.GOLD_LEGGINGS),
                     new ItemStack(Material.IRON_AXE),
                     new ItemStack(Material.LEATHER_HELMET),
                     new ItemStack(Material.DIAMOND_AXE),
                     new ItemStack(Material.APPLE, 4),
             },
             {
-                    new ItemStack(Material.IRON_CHESTPLATE, 3),
+                    new ItemStack(Material.IRON_CHESTPLATE),
                     new ItemStack(Material.LEATHER_HELMET),
                     new ItemStack(Material.LEATHER_BOOTS),
                     new ItemStack(Material.IRON_SWORD),
             },
             {
-                    new ItemStack(Material.BOW, 4),
-                    new ItemStack(Material.ARROW, 64),
+                    new ItemStack(Material.BOW, 1),
                     new ItemStack(Material.ARROW, 32),
                     new ItemStack(Material.WOOD_AXE),
                     new ItemStack(Material.GOLDEN_APPLE, 2),
@@ -139,7 +138,7 @@ public class LootSpawner {
         Random random = new Random();
         int length = item.length;
         ItemStack[] array = item[random.nextInt(length)];
-        location.getWorld().playSound(location, Sound.ENTITY_MINECART_INSIDE, 1f, 1f);
+        location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f);
         for (ItemStack itemStack : array) {
             location.getWorld().dropItem(location, itemStack);
         }

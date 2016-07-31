@@ -24,7 +24,7 @@ public class BayTower {
 
     public void visualizeHolder() {
 
-        for (Location location : pointsOnLineY(bay.getConfig().getTowerMin(), bay.getConfig().getTowerMax(), 25)) {
+        for (Location location : pointsOnLineY(bay.getConfig().getTowerMin(), bay.getConfig().getTowerMax(), 20)) {
             location.getWorld().spawnParticle(Particle.CLOUD, location, 0, 0, 0, 0);
         }
     }
@@ -57,6 +57,13 @@ public class BayTower {
 
                 bay.setCatchProgress(catcher, bay.getCatchProgress(catcher) + entry.getValue().size());
             }
+
+            users.forEach((team, users1) -> {
+                for (User user : users1) {
+                    int rawXp = bay.getCatchProgress(team);
+                    user.getPlayer().setLevel(rawXp);
+                }
+            });
 
             if(bay.getCatchProgress(catcher) >= 200) {
                 bay.setCatchProgress(catcher, 0);

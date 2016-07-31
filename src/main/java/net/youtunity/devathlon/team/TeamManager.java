@@ -6,6 +6,7 @@ import org.bukkit.DyeColor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by thecrealm on 30.07.16.
@@ -28,6 +29,10 @@ public class TeamManager {
 
     public List<Team> getTeams() {
         return teams;
+    }
+
+    public Team getRandomTeam() {
+        return teams.get(0);
     }
 
     public Team find(String name) {

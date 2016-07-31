@@ -8,6 +8,7 @@ import net.youtunity.devathlon.bay.BayManager;
 import net.youtunity.devathlon.command.*;
 import net.youtunity.devathlon.gson.GsonLocationAdapter;
 import net.youtunity.devathlon.state.StateManager;
+import net.youtunity.devathlon.state.impl.EndState;
 import net.youtunity.devathlon.state.impl.IngameState;
 import net.youtunity.devathlon.state.impl.LobbyState;
 import net.youtunity.devathlon.team.TeamManager;
@@ -59,6 +60,7 @@ public class DevathlonPlugin extends JavaPlugin {
         this.stateManager = new StateManager();
         this.stateManager.registerState(new LobbyState(this));
         this.stateManager.registerState(new IngameState(this));
+        this.stateManager.registerState(new EndState(this));
 
         CommandExecutor setup = new CommandExecutor(this, "setup");
         setup.addCommandHandler(new LobbyCommand(this));

@@ -32,7 +32,6 @@ public class BoatListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-
         if(event.getPlayer().getInventory().contains(Material.BOAT)) return;
         Block relative = event.getTo().clone().getBlock().getRelative(BlockFace.DOWN);
         if(relative.getType() == Material.WATER || relative.getType() == Material.STATIONARY_WATER) {
@@ -45,6 +44,9 @@ public class BoatListener implements Listener {
 
     @EventHandler
     public void onVehicle(VehicleExitEvent event) {
+
+        System.out.println(event.getVehicle().toString());
+
         if(event.getVehicle() instanceof Boat) {
             event.getVehicle().remove();
 
