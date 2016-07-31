@@ -39,6 +39,10 @@ public class UserManager implements Listener {
         return null;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
     private void add(Player player) {
         users.add(new User(player));
     }

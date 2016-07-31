@@ -3,7 +3,6 @@ package net.youtunity.devathlon.state;
 import com.quartercode.quarterbukkit.api.MathUtil;
 import com.quartercode.quarterbukkit.api.scheduler.ScheduleTask;
 import net.youtunity.devathlon.DevathlonPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,25 +37,29 @@ public abstract class CountedState extends State {
                     case UP:
                         if(getCurrentCount() >= end) {
                             cancel();
+                            plugin.getStateManager().doNextState();
                         }
-                        onCount(counter.incrementAndGet());
+                        onCount(counter.get());
+                        counter.incrementAndGet();
                     case DOWN:
                         if(getCurrentCount() <= end) {
                             cancel();
+                            plugin.getStateManager().doNextState();
                         }
-                        onCount(counter.decrementAndGet());
+                        onCount(counter.get());
+                        counter.decrementAndGet();
                 }
             }
         };
 
-        this.task.run(true, 0, MathUtil.getTicks(1000));
+        this.task.run(true, 0, 1000);
         enter();
     }
 
     @Override
     public void onLeave() {
 
-        if(task != null) {
+        if(task != null && task.isRunning()) {
             task.cancel();
         }
         leave();

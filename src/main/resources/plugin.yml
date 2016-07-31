@@ -1,4 +1,6 @@
 name: Devathlon
 version: 1.0
 main: net.youtunity.devathlon.DevathlonPlugin
-softdepend: [QuarterBukkit-Plugin]
+softdepend: [QuarterBukkit-Plugin, ProtocolLib]
+commands:
+  setup:

@@ -23,6 +23,10 @@ public abstract class ShapeListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    public Shape getShape() {
+        return shape;
+    }
+
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         if(shape.intersects(event.getTo())) {

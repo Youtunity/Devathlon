@@ -1,5 +1,8 @@
 package net.youtunity.devathlon.team;
 
+import net.youtunity.devathlon.DevathlonConfig;
+import net.youtunity.devathlon.DevathlonPlugin;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,10 +11,22 @@ import java.util.List;
  */
 public class TeamManager {
 
+    private DevathlonPlugin plugin;
     private List<Team> teams = new ArrayList<>();
 
-    public void registerTeam(Team team) {
-        teams.add(team);
+    public TeamManager(DevathlonPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public void init() {
+
+        for (DevathlonConfig.Team team : plugin.getDevathlonConfig().getTeams()) {
+            teams.add(new Team(team.getName(), team));
+        }
+    }
+
+    public List<Team> getTeams() {
+        return teams;
     }
 
     public Team find(String name) {
